@@ -1,14 +1,10 @@
 # AgentMemBench
 
 > **AgentMemBench: A Taxonomy-Driven Benchmark for Agent Memory Systems**
-> 
-> Zaiying Ma, Feng Zhang, Jiawei Guan, Xiaoyong Du
-> 
-> Renmin University of China
-> 
-> *IEEE ICDE 2026*
+>
+> *Anonymous Authors â€” Under Review at IEEE ICDE 2026*
 
-[![Paper](https://img.shields.io/badge/paper-ICDE2026-blue)](https://github.com/mazaiying/AgentMemBench)
+[![Paper](https://img.shields.io/badge/paper-ICDE2026-blue)](https://anonymous.4open.science/r/AgentMemBench-ECBC)
 [![Dataset](https://img.shields.io/badge/dataset-MemDialogue%2010k-green)](data/memdialogue.jsonl)
 [![License](https://img.shields.io/badge/license-MIT-orange)](LICENSE)
 
@@ -187,9 +183,9 @@ Statistics: 6,800 personal facts (68%) + 3,200 task-request events (32%). Typeâ€
 ## Citation
 
 ```bibtex
-@inproceedings{ma2026agentmembench,
+@inproceedings{anonymous2026agentmembench,
   title     = {AgentMemBench: A Taxonomy-Driven Benchmark for Agent Memory Systems},
-  author    = {Ma, Zaiying and Zhang, Feng and Guan, Jiawei and Du, Xiaoyong},
+  author    = {Anonymous Authors},
   booktitle = {Proceedings of the 42nd IEEE International Conference on Data Engineering (ICDE)},
   year      = {2026}
 }
