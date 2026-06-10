@@ -1,0 +1,65 @@
+{
+  "system": "Naive RAG",
+  "timestamp": "2026-06-05T00:33:10.268923",
+  "config": {
+    "embedder": "text-embedding-v3",
+    "vector_store": "qdrant (in-memory)",
+    "llm": "none"
+  },
+  "write_latencies_ms": [
+    1317.3644999042153,
+    442.05808301921934,
+    616.7164590442553,
+    611.0430839471519,
+    684.619165956974,
+    718.7707499833778,
+    469.19495798647404,
+    427.1206249250099,
+    719.979084096849,
+    641.8087910860777
+  ],
+  "read_latencies_ms": [
+    572.4296249682084,
+    648.5556249972433,
+    496.5517920209095,
+    456.8133749999106,
+    666.7038330342621
+  ],
+  "query_results": [
+    {
+      "query": "What is this user's research direction?",
+      "retrieved": "User's doctoral advisor is Professor Zhang, with group meetings every Thursday afternoon.",
+      "hit": false,
+      "stale": false,
+      "latency_ms": 572.4296249682084
+    },
+    {
+      "query": "What programming language does the user prefer?",
+      "retrieved": "User prefers writing code in Python and dislikes Java.",
+      "hit": true,
+      "stale": false,
+      "latency_ms": 648.5556249972433
+    },
+    {
+      "query": "Which conference is the user submitting a paper to?",
+      "retrieved": "User is writing a paper for ICDE 2027 on Agent Memory Benchmarking.",
+      "hit": true,
+      "stale": false,
+      "latency_ms": 496.5517920209095
+    },
+    {
+      "query": "What is User A's current job title?",
+      "retrieved": "UPDATE: User A has transferred from product manager to technical director.",
+      "hit": true,
+      "stale": true,
+      "latency_ms": 456.8133749999106
+    },
+    {
+      "query": "What is the core problem with KV Cache?",
+      "retrieved": "The largest problem in KV Cache is the inability to cache hits for semantically similar prompts.",
+      "hit": true,
+      "stale": false,
+      "latency_ms": 666.7038330342621
+    }
+  ]
+}

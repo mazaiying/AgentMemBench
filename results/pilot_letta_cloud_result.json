@@ -1,0 +1,71 @@
+{
+  "system": "Letta Cloud",
+  "timestamp": "2026-06-05T10:58:37.187775",
+  "llm": "letta/auto (Letta managed)",
+  "note": "Letta Cloud free tier; detection: got_new=True if new kw in reply",
+  "write_latencies_ms": [
+    14111.471417010762,
+    18761.59549993463,
+    7936.263417010196,
+    6451.326166978106,
+    10138.817041995935
+  ],
+  "read_latencies_ms": [
+    4163.737208000384,
+    2107.3276670649648,
+    2786.8702081032097
+  ],
+  "pilot_hit_rate": 1.0,
+  "memconflict": {
+    "n": 5,
+    "new_fact_rate": 1.0,
+    "staleness_rate": 0.0,
+    "results": [
+      {
+        "id": "mc001",
+        "type": "job_change",
+        "got_new": true,
+        "stale": false,
+        "got_old_mentioned": true,
+        "latency_ms": 7134.681624942459,
+        "reply": "Based on our conversation, Sarah's current job title is **Senior Software Engineer** at TechCorp. She was recently promoted from her previous role as Junior Software Engineer."
+      },
+      {
+        "id": "mc011",
+        "type": "location_change",
+        "got_new": true,
+        "stale": false,
+        "got_old_mentioned": true,
+        "latency_ms": 3336.492999922484,
+        "reply": "Based on our conversation, David now lives in **San Francisco**. He moved there from New York City for a new job."
+      },
+      {
+        "id": "mc021",
+        "type": "numeric_update",
+        "got_new": true,
+        "stale": false,
+        "got_old_mentioned": true,
+        "latency_ms": 2867.862957995385,
+        "reply": "Based on our conversation, the project budget is **$2.5 million** (originally $1 million, then increased)."
+      },
+      {
+        "id": "mc031",
+        "type": "preference_change",
+        "got_new": true,
+        "stale": false,
+        "got_old_mentioned": true,
+        "latency_ms": 4298.411499941722,
+        "reply": "Based on our conversation history, you currently prefer **light mode**. Here's the timeline of your preference:\n\n1. **Initially:** You preferred dark mode in all applications.\n2. **Updated:** You swit"
+      },
+      {
+        "id": "mc041",
+        "type": "status_change",
+        "got_new": true,
+        "stale": false,
+        "got_old_mentioned": true,
+        "latency_ms": 2068.1665409356356,
+        "reply": "Based on our conversation, your paper was **accepted** at ICDE 2027! 🎉 You first mentioned it was under review, and then shared the great news that it was accepted."
+      }
+    ]
+  }
+}

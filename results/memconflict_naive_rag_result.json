@@ -1,0 +1,207 @@
+{
+  "system": "Naive RAG",
+  "test": "memconflict",
+  "timestamp": "2026-06-05T01:14:16.584343",
+  "n_total": 25,
+  "new_fact_rate": 0.2,
+  "staleness_rate": 0.84,
+  "by_type": {
+    "job_change": {
+      "new_rate": 0.6,
+      "old_rate": 0.6
+    },
+    "location_change": {
+      "new_rate": 0.0,
+      "old_rate": 1.0
+    },
+    "numeric_update": {
+      "new_rate": 0.0,
+      "old_rate": 1.0
+    },
+    "preference_change": {
+      "new_rate": 0.0,
+      "old_rate": 1.0
+    },
+    "status_change": {
+      "new_rate": 0.4,
+      "old_rate": 0.6
+    }
+  },
+  "results": [
+    {
+      "id": "mc001",
+      "type": "job_change",
+      "got_new": true,
+      "got_old": false,
+      "latency_ms": 464.8401669692248
+    },
+    {
+      "id": "mc002",
+      "type": "job_change",
+      "got_new": false,
+      "got_old": true,
+      "latency_ms": 456.9806669605896
+    },
+    {
+      "id": "mc003",
+      "type": "job_change",
+      "got_new": true,
+      "got_old": true,
+      "latency_ms": 579.8470419831574
+    },
+    {
+      "id": "mc004",
+      "type": "job_change",
+      "got_new": false,
+      "got_old": true,
+      "latency_ms": 515.3163330396637
+    },
+    {
+      "id": "mc005",
+      "type": "job_change",
+      "got_new": true,
+      "got_old": false,
+      "latency_ms": 436.29391596186906
+    },
+    {
+      "id": "mc011",
+      "type": "location_change",
+      "got_new": false,
+      "got_old": true,
+      "latency_ms": 570.9428749978542
+    },
+    {
+      "id": "mc012",
+      "type": "location_change",
+      "got_new": false,
+      "got_old": true,
+      "latency_ms": 618.0590000003576
+    },
+    {
+      "id": "mc013",
+      "type": "location_change",
+      "got_new": false,
+      "got_old": true,
+      "latency_ms": 549.5812910376117
+    },
+    {
+      "id": "mc014",
+      "type": "location_change",
+      "got_new": false,
+      "got_old": true,
+      "latency_ms": 493.5363329714164
+    },
+    {
+      "id": "mc015",
+      "type": "location_change",
+      "got_new": false,
+      "got_old": true,
+      "latency_ms": 523.8289999542758
+    },
+    {
+      "id": "mc021",
+      "type": "numeric_update",
+      "got_new": false,
+      "got_old": true,
+      "latency_ms": 629.0430830558762
+    },
+    {
+      "id": "mc022",
+      "type": "numeric_update",
+      "got_new": false,
+      "got_old": true,
+      "latency_ms": 473.9667499670759
+    },
+    {
+      "id": "mc023",
+      "type": "numeric_update",
+      "got_new": false,
+      "got_old": true,
+      "latency_ms": 600.2991670975462
+    },
+    {
+      "id": "mc024",
+      "type": "numeric_update",
+      "got_new": false,
+      "got_old": true,
+      "latency_ms": 425.74766697362065
+    },
+    {
+      "id": "mc025",
+      "type": "numeric_update",
+      "got_new": false,
+      "got_old": true,
+      "latency_ms": 617.396124987863
+    },
+    {
+      "id": "mc031",
+      "type": "preference_change",
+      "got_new": false,
+      "got_old": true,
+      "latency_ms": 606.407874962315
+    },
+    {
+      "id": "mc032",
+      "type": "preference_change",
+      "got_new": false,
+      "got_old": true,
+      "latency_ms": 648.0405420297757
+    },
+    {
+      "id": "mc033",
+      "type": "preference_change",
+      "got_new": false,
+      "got_old": true,
+      "latency_ms": 515.6740000238642
+    },
+    {
+      "id": "mc034",
+      "type": "preference_change",
+      "got_new": false,
+      "got_old": true,
+      "latency_ms": 478.5173749551177
+    },
+    {
+      "id": "mc035",
+      "type": "preference_change",
+      "got_new": false,
+      "got_old": true,
+      "latency_ms": 433.7882499676198
+    },
+    {
+      "id": "mc041",
+      "type": "status_change",
+      "got_new": false,
+      "got_old": true,
+      "latency_ms": 439.4966249819845
+    },
+    {
+      "id": "mc042",
+      "type": "status_change",
+      "got_new": false,
+      "got_old": true,
+      "latency_ms": 515.7030409900472
+    },
+    {
+      "id": "mc043",
+      "type": "status_change",
+      "got_new": true,
+      "got_old": false,
+      "latency_ms": 479.00225000921637
+    },
+    {
+      "id": "mc044",
+      "type": "status_change",
+      "got_new": true,
+      "got_old": false,
+      "latency_ms": 436.7882499936968
+    },
+    {
+      "id": "mc045",
+      "type": "status_change",
+      "got_new": false,
+      "got_old": true,
+      "latency_ms": 564.3859580159187
+    }
+  ]
+}

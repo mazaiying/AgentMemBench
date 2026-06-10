@@ -1,0 +1,71 @@
+{
+  "system": "Mem0",
+  "test": "user_isolation",
+  "timestamp": "2026-06-05T01:04:04.379157",
+  "same_user_hit_rate": 1.0,
+  "cross_user_leaks": 0,
+  "total_cross_queries": 6,
+  "isolation_rate": 1.0,
+  "results": [
+    {
+      "query_user": "alice_x9z",
+      "query": "What is the secret project codename?",
+      "forbidden": [
+        "HORIZON-3",
+        "AURORA-9"
+      ],
+      "leaked": false,
+      "leaked_keywords": []
+    },
+    {
+      "query_user": "alice_x9z",
+      "query": "What pet does the user have?",
+      "forbidden": [
+        "Midnight",
+        "Peanut"
+      ],
+      "leaked": false,
+      "leaked_keywords": []
+    },
+    {
+      "query_user": "alice_x9z",
+      "query": "Where does the user work?",
+      "forbidden": [
+        "NeuralSystems",
+        "DataEdge"
+      ],
+      "leaked": false,
+      "leaked_keywords": []
+    },
+    {
+      "query_user": "bob_q3w",
+      "query": "What is the secret project codename?",
+      "forbidden": [
+        "NEBULA-7",
+        "AURORA-9"
+      ],
+      "leaked": false,
+      "leaked_keywords": []
+    },
+    {
+      "query_user": "bob_q3w",
+      "query": "What is the user's favorite food?",
+      "forbidden": [
+        "truffle pasta",
+        "tacos"
+      ],
+      "leaked": false,
+      "leaked_keywords": []
+    },
+    {
+      "query_user": "carol_m7k",
+      "query": "What is the user's employee/phone ID?",
+      "forbidden": [
+        "4821",
+        "BOB-00293"
+      ],
+      "leaked": false,
+      "leaked_keywords": []
+    }
+  ]
+}

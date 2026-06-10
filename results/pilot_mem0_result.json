@@ -1,0 +1,75 @@
+{
+  "system": "Mem0",
+  "timestamp": "2026-06-04T23:22:48.532296",
+  "config": {
+    "llm": "qwen-plus",
+    "embedder": "text-embedding-v3",
+    "vector_store": "qdrant (in-memory)"
+  },
+  "write_latencies_ms": [
+    9572.412207955495,
+    3413.247166899964,
+    3515.2698329184204,
+    4938.028000062332,
+    11213.83533300832,
+    7389.049416990019,
+    7445.961790974252,
+    7573.3494580490515,
+    6426.289457944222,
+    11449.848624994047
+  ],
+  "read_latencies_ms": [
+    1713.7019579531625,
+    654.2041660286486,
+    698.0178330559283,
+    645.6047500250861,
+    696.4818340493366
+  ],
+  "query_results": [
+    {
+      "query": "这个用户的研究方向是什么？",
+      "expected_cn": "大语言模型",
+      "expected_en": "large language model",
+      "retrieved": "User's name is Ma Zaiying and is a doctoral student at Renmin University of China, researching large language models",
+      "hit": true,
+      "stale": false,
+      "latency_ms": 1713.7019579531625
+    },
+    {
+      "query": "用户喜欢哪种编程语言？",
+      "expected_cn": "Python",
+      "expected_en": "python",
+      "retrieved": "User prefers writing code in Python and dislikes Java",
+      "hit": true,
+      "stale": false,
+      "latency_ms": 654.2041660286486
+    },
+    {
+      "query": "用户在投哪个会议的论文？",
+      "expected_cn": "ICDE",
+      "expected_en": "icde",
+      "retrieved": "User's doctoral advisor is Professor Zhang and they hold group meetings every Thursday afternoon",
+      "hit": false,
+      "stale": false,
+      "latency_ms": 698.0178330559283
+    },
+    {
+      "query": "用户A现在的职位是什么？",
+      "expected_cn": "技术总监",
+      "expected_en": "technical director",
+      "retrieved": "User A is a product manager based in Shanghai and is responsible for the AI product line",
+      "hit": false,
+      "stale": true,
+      "latency_ms": 645.6047500250861
+    },
+    {
+      "query": "KV Cache 的核心问题是什么？",
+      "expected_cn": "语义相似",
+      "expected_en": "semantic",
+      "retrieved": "User identifies the largest problem in KV Cache as the inability to cache hits for semantically similar prompts due to reliance on exact match caching",
+      "hit": true,
+      "stale": false,
+      "latency_ms": 696.4818340493366
+    }
+  ]
+}

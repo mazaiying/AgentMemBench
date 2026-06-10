@@ -1,0 +1,64 @@
+{
+  "system": "Mem0",
+  "test": "hallucination_hq100_v2",
+  "timestamp": "2026-06-05T15:45:40.646672",
+  "n_total": 3000,
+  "n_personal_fact": 2040,
+  "n_tested": 100,
+  "write_success_rate": 1.0,
+  "recall_rate": 0.58,
+  "omission_rate": 0.42000000000000004,
+  "write_avg_ms": 4575.262553682551,
+  "results": [
+    {
+      "hit": true,
+      "fact": "The user has knowledge of C preprocessor directives includin",
+      "reply": "User has knowledge of C preprocessor directives, specifically #ifndef and #defin"
+    },
+    {
+      "hit": false,
+      "fact": "The user is working on SOTIF improvement requirements using ",
+      "reply": "User is working on SOTIF (Safety of the Intended Functionality) improvement requ"
+    },
+    {
+      "hit": true,
+      "fact": "The user wrote a story where NAME_1 loses her bikini bottoms",
+      "reply": "User wrote a story in which a character named NAME_1 loses her bikini bottoms in"
+    },
+    {
+      "hit": false,
+      "fact": "The user knows that 'pisci quando NAME_2' means 'pee when I ",
+      "reply": "User knows that the Italian phrase 'pisci quando NAME_2' translates to 'pee when"
+    },
+    {
+      "hit": true,
+      "fact": "The user is practicing algorithmic problem solving involving",
+      "reply": "User is practicing algorithmic problem solving with a focus on time complexity a"
+    },
+    {
+      "hit": false,
+      "fact": "The user stated that the first four inputs will contain info",
+      "reply": ""
+    },
+    {
+      "hit": true,
+      "fact": "The user enjoys the pain experienced during workouts.",
+      "reply": "User enjoys the physical pain experienced during workouts, indicating a preferen"
+    },
+    {
+      "hit": true,
+      "fact": "The user is learning or curious about the Romanian language.",
+      "reply": "User is learning or curious about the Romanian language"
+    },
+    {
+      "hit": false,
+      "fact": "The user saw a movie a very long time ago that featured a sc",
+      "reply": ""
+    },
+    {
+      "hit": false,
+      "fact": "The user is organizing an event where decorations are needed",
+      "reply": ""
+    }
+  ]
+}

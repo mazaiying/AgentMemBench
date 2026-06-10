@@ -1,0 +1,42 @@
+{
+  "system": "Mem0",
+  "test": "hallucination",
+  "timestamp": "2026-06-05T11:34:24.391388",
+  "n_samples": 20,
+  "write_success_rate": 1.0,
+  "recall_rate": 0.6,
+  "omission_rate": 0.4,
+  "fabrication_rate": 0.0,
+  "sample_results": [
+    {
+      "uid": "halu_87f6a9cb",
+      "fact": "The user asked for an organized bullet list conclusion on al",
+      "reply": "",
+      "hit": false
+    },
+    {
+      "uid": "halu_bf9ce92e",
+      "fact": "The user knows that the Burj Al Arab has 56 floors and 202 r",
+      "reply": "User knows that the Burj Al Arab has 56 floors and 202 rooms",
+      "hit": true
+    },
+    {
+      "uid": "halu_3be8066a",
+      "fact": "The user is interested in open-source developers specialized",
+      "reply": "User is interested in open-source developers who specialize in education technol",
+      "hit": true
+    },
+    {
+      "uid": "halu_37e4d0e3",
+      "fact": "The user's name is NAME_2.",
+      "reply": "User's name is NAME_2",
+      "hit": true
+    },
+    {
+      "uid": "halu_036eb0b0",
+      "fact": "The user is creating a story where NAME_1 develops an alter ",
+      "reply": "User is creating a story in which a character named NAME_1 develops an alter ego",
+      "hit": true
+    }
+  ]
+}

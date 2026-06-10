@@ -1,0 +1,23 @@
+{
+  "system": "Letta",
+  "timestamp": "2026-06-05T10:43:42.963486",
+  "status": "architecture_constraint",
+  "letta_version_tested": "0.16.8",
+  "finding": {
+    "code": "F8",
+    "title": "Letta Client-Server Architectural Lock-in",
+    "description": "Letta >= 0.6.x has been refactored into a mandatory client-server architecture. The embedded/local mode (create_client()) was removed. Running Letta now requires: (1) a running Letta server (Docker or cloud), (2) asyncpg + PostgreSQL for persistence, or (3) Letta Cloud API key. This makes Letta impossible to deploy in air-gapped or resource-constrained environments.",
+    "import_error": "cannot import name create_client from letta",
+    "server_import_error": "No module named asyncpg (required by letta.orm)",
+    "rq_mapping": "RQ6 (Portability & Deployment Constraints)",
+    "severity": "CRITICAL - bars use in many enterprise/research environments"
+  },
+  "comparison": {
+    "mem0": "Fully embeddable, pip install mem0ai, runs in-process",
+    "graphiti": "Requires Neo4j but otherwise embeddable",
+    "naive_rag": "Zero dependencies beyond embedding API",
+    "langmem": "Embeddable but embedding API format constraint",
+    "letta": "REQUIRES dedicated server process - highest deployment friction"
+  },
+  "note": "This architectural finding is itself a key MemSysBench contribution: Letta has the highest deployment barrier of all tested systems."
+}

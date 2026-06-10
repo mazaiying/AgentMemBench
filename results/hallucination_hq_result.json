@@ -1,0 +1,53 @@
+{
+  "system": "Mem0",
+  "test": "hallucination_hq100",
+  "timestamp": "2026-06-05T15:29:46.568448",
+  "n_total_dataset": 3000,
+  "n_personal_fact": 2040,
+  "n_tested": 100,
+  "write_success_rate": 0.0,
+  "recall_rate": 0.0,
+  "omission_rate": 1.0,
+  "results": [
+    {
+      "hit": false,
+      "error": "Error code: 400 - {'error': {'message': 'Access denied, please make sure your account is in good standing. For details, see: https://help.aliyun.com/zh/model-studio/error-code#overdue-payment', 'type': 'Arrearage', 'param': None, 'code': 'Arrearage'}, 'id': '70faa190-f670-9cc9-a322-5ffe8c7246aa', 'request_id': '70faa190-f670-9cc9-a322-5ffe8c7246aa'}"
+    },
+    {
+      "hit": false,
+      "error": "Error code: 400 - {'error': {'message': 'Access denied, please make sure your account is in good standing. For details, see: https://help.aliyun.com/zh/model-studio/error-code#overdue-payment', 'type': 'Arrearage', 'param': None, 'code': 'Arrearage'}, 'id': '8206cb8a-3e78-910b-863e-2dca1018f5c7', 'request_id': '8206cb8a-3e78-910b-863e-2dca1018f5c7'}"
+    },
+    {
+      "hit": false,
+      "error": "Error code: 400 - {'error': {'message': 'Access denied, please make sure your account is in good standing. For details, see: https://help.aliyun.com/zh/model-studio/error-code#overdue-payment', 'type': 'Arrearage', 'param': None, 'code': 'Arrearage'}, 'id': 'dbdcb949-acc5-9cf5-a276-31986ada9147', 'request_id': 'dbdcb949-acc5-9cf5-a276-31986ada9147'}"
+    },
+    {
+      "hit": false,
+      "error": "Error code: 400 - {'error': {'message': 'Access denied, please make sure your account is in good standing. For details, see: https://help.aliyun.com/zh/model-studio/error-code#overdue-payment', 'type': 'Arrearage', 'param': None, 'code': 'Arrearage'}, 'id': 'f16b2d02-fb5b-9c29-b037-30d332cc598f', 'request_id': 'f16b2d02-fb5b-9c29-b037-30d332cc598f'}"
+    },
+    {
+      "hit": false,
+      "error": "Error code: 400 - {'error': {'message': 'Access denied, please make sure your account is in good standing. For details, see: https://help.aliyun.com/zh/model-studio/error-code#overdue-payment', 'type': 'Arrearage', 'param': None, 'code': 'Arrearage'}, 'id': '5e2d054a-1c66-9b04-baf6-33acd6a62d8d', 'request_id': '5e2d054a-1c66-9b04-baf6-33acd6a62d8d'}"
+    },
+    {
+      "hit": false,
+      "error": "Error code: 400 - {'error': {'message': 'Access denied, please make sure your account is in good standing. For details, see: https://help.aliyun.com/zh/model-studio/error-code#overdue-payment', 'type': 'Arrearage', 'param': None, 'code': 'Arrearage'}, 'id': '233ec29e-44a5-9adb-a9b3-0cf61676a50e', 'request_id': '233ec29e-44a5-9adb-a9b3-0cf61676a50e'}"
+    },
+    {
+      "hit": false,
+      "error": "Error code: 400 - {'error': {'message': 'Access denied, please make sure your account is in good standing. For details, see: https://help.aliyun.com/zh/model-studio/error-code#overdue-payment', 'type': 'Arrearage', 'param': None, 'code': 'Arrearage'}, 'id': '6091109f-2a99-9eca-989a-00532d8247e6', 'request_id': '6091109f-2a99-9eca-989a-00532d8247e6'}"
+    },
+    {
+      "hit": false,
+      "error": "Error code: 400 - {'error': {'message': 'Access denied, please make sure your account is in good standing. For details, see: https://help.aliyun.com/zh/model-studio/error-code#overdue-payment', 'type': 'Arrearage', 'param': None, 'code': 'Arrearage'}, 'id': '32e83219-8266-98b8-a6b9-b5347062d839', 'request_id': '32e83219-8266-98b8-a6b9-b5347062d839'}"
+    },
+    {
+      "hit": false,
+      "error": "Error code: 400 - {'error': {'message': 'Access denied, please make sure your account is in good standing. For details, see: https://help.aliyun.com/zh/model-studio/error-code#overdue-payment', 'type': 'Arrearage', 'param': None, 'code': 'Arrearage'}, 'id': '3cbe6ee1-8896-949b-8644-5a53fb86f14e', 'request_id': '3cbe6ee1-8896-949b-8644-5a53fb86f14e'}"
+    },
+    {
+      "hit": false,
+      "error": "Error code: 400 - {'error': {'message': 'Access denied, please make sure your account is in good standing. For details, see: https://help.aliyun.com/zh/model-studio/error-code#overdue-payment', 'type': 'Arrearage', 'param': None, 'code': 'Arrearage'}, 'id': '9c528a1a-4d61-9f5f-bcd6-abe4556191c2', 'request_id': '9c528a1a-4d61-9f5f-bcd6-abe4556191c2'}"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "system": "Mem0",
+  "test": "deletion_completeness",
+  "timestamp": "2026-06-05T11:32:08.411759",
+  "key_finding": "Mem0 automatically filtered PII-sensitive facts at write time (SSN, credit card, medical diagnosis, home address). Only 5 normal facts were stored out of 10 written.",
+  "summary": {
+    "n_written_attempted": 10,
+    "n_actually_stored": 5,
+    "sensitive_stored": 0,
+    "normal_stored": 5,
+    "pii_auto_filter_rate": 1.0,
+    "pre_delete_sensitive_recall": 0.0,
+    "pre_delete_normal_recall": 1.0,
+    "post_delete_sensitive_leak_rate": 0.0,
+    "post_delete_normal_retention": 1.0,
+    "deletion_completeness": 1.0
+  },
+  "implication": "Mem0 has implicit PII filtering. Sensitive data (SSN, credit card, medical) was rejected at write time, not after explicit deletion. This is a privacy feature but also an undocumented behavior that affects benchmark evaluation."
+}

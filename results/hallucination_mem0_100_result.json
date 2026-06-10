@@ -1,0 +1,54 @@
+{
+  "system": "Mem0",
+  "test": "hallucination_100",
+  "timestamp": "2026-06-05T15:25:25.915586",
+  "n_samples": 100,
+  "dataset_size": 3000,
+  "write_success_rate": 0.96,
+  "recall_rate": 0.0,
+  "omission_rate": 1.0,
+  "write_avg_ms": 4562.329847676058,
+  "results": [
+    {
+      "hit": false,
+      "error": "Error code: 400 - {'error': {'message': 'Access denied, please make sure your account is in good standing. For details, see: https://help.aliyun.com/zh/model-studio/error-code#overdue-payment', 'type': 'Arrearage', 'param': None, 'code': 'Arrearage'}, 'id': '3774f19b-ad45-9851-8e92-6a4234b6ff55', 'request_id': '3774f19b-ad45-9851-8e92-6a4234b6ff55'}"
+    },
+    {
+      "hit": false,
+      "error": "Error code: 400 - {'error': {'message': 'Access denied, please make sure your account is in good standing. For details, see: https://help.aliyun.com/zh/model-studio/error-code#overdue-payment', 'type': 'Arrearage', 'param': None, 'code': 'Arrearage'}, 'id': '3b70e940-0b22-9c6f-81d3-b9b9409f160a', 'request_id': '3b70e940-0b22-9c6f-81d3-b9b9409f160a'}"
+    },
+    {
+      "hit": false,
+      "error": "Error code: 400 - {'error': {'message': 'Access denied, please make sure your account is in good standing. For details, see: https://help.aliyun.com/zh/model-studio/error-code#overdue-payment', 'type': 'Arrearage', 'param': None, 'code': 'Arrearage'}, 'id': '5b2e6885-e5df-9bec-b8a5-5109cb2f7d92', 'request_id': '5b2e6885-e5df-9bec-b8a5-5109cb2f7d92'}"
+    },
+    {
+      "hit": false,
+      "error": "Error code: 400 - {'error': {'message': 'Access denied, please make sure your account is in good standing. For details, see: https://help.aliyun.com/zh/model-studio/error-code#overdue-payment', 'type': 'Arrearage', 'param': None, 'code': 'Arrearage'}, 'id': 'b57a0212-828c-9802-ae49-1f24635f41c1', 'request_id': 'b57a0212-828c-9802-ae49-1f24635f41c1'}"
+    },
+    {
+      "hit": false,
+      "error": "Error code: 400 - {'error': {'message': 'Access denied, please make sure your account is in good standing. For details, see: https://help.aliyun.com/zh/model-studio/error-code#overdue-payment', 'type': 'Arrearage', 'param': None, 'code': 'Arrearage'}, 'id': '68c0734c-3bd1-9f3a-8087-93b738f965c9', 'request_id': '68c0734c-3bd1-9f3a-8087-93b738f965c9'}"
+    },
+    {
+      "hit": false,
+      "error": "Error code: 400 - {'error': {'message': 'Access denied, please make sure your account is in good standing. For details, see: https://help.aliyun.com/zh/model-studio/error-code#overdue-payment', 'type': 'Arrearage', 'param': None, 'code': 'Arrearage'}, 'id': '22c2a461-8c46-9ecd-a95f-73e00e14a185', 'request_id': '22c2a461-8c46-9ecd-a95f-73e00e14a185'}"
+    },
+    {
+      "hit": false,
+      "error": "Error code: 400 - {'error': {'message': 'Access denied, please make sure your account is in good standing. For details, see: https://help.aliyun.com/zh/model-studio/error-code#overdue-payment', 'type': 'Arrearage', 'param': None, 'code': 'Arrearage'}, 'id': '8620412e-a41c-9bda-8068-be077de5dc13', 'request_id': '8620412e-a41c-9bda-8068-be077de5dc13'}"
+    },
+    {
+      "hit": false,
+      "error": "Error code: 400 - {'error': {'message': 'Access denied, please make sure your account is in good standing. For details, see: https://help.aliyun.com/zh/model-studio/error-code#overdue-payment', 'type': 'Arrearage', 'param': None, 'code': 'Arrearage'}, 'id': '0be86df9-c399-9182-9e14-61aa0445e73a', 'request_id': '0be86df9-c399-9182-9e14-61aa0445e73a'}"
+    },
+    {
+      "hit": false,
+      "fact": "The user is 31 years old.",
+      "reply": "User is 31 years old as of June 5, 2026"
+    },
+    {
+      "hit": false,
+      "error": "Error code: 400 - {'error': {'message': 'Access denied, please make sure your account is in good standing. For details, see: https://help.aliyun.com/zh/model-studio/error-code#overdue-payment', 'type': 'Arrearage', 'param': None, 'code': 'Arrearage'}, 'id': '5683c8ec-94da-9b8b-8d41-4bec9923265d', 'request_id': '5683c8ec-94da-9b8b-8d41-4bec9923265d'}"
+    }
+  ]
+}
