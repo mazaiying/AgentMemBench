@@ -8,7 +8,7 @@
 > 
 > *IEEE ICDE 2026*
 
-[![Paper](https://img.shields.io/badge/paper-ICDE2026-blue)](https://github.com/mzaiying/AgentMemBench)
+[![Paper](https://img.shields.io/badge/paper-ICDE2026-blue)](https://github.com/mazaiying/AgentMemBench)
 [![Dataset](https://img.shields.io/badge/dataset-MemDialogue%2010k-green)](data/memdialogue.jsonl)
 [![License](https://img.shields.io/badge/license-MIT-orange)](LICENSE)
 
