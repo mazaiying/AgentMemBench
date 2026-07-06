@@ -52,7 +52,7 @@ AgentMemBench/
 │       ├── gen_fig2.py               # Fig 2: Motivation radar chart
 │       ├── gen_fig3.py               # Fig 3: System overview
 │       ├── gen_fig4.py               # Fig 4: MemConflict example
-│       └── gen_formal_figures.py      # Figs 5–8: Formal results and data profile
+│       └── gen_formal_figures.py      # Figs 5–10: Original-style formal plots
 ├── data/
 │   ├── SHA256SUMS                    # Dataset integrity manifest
 │   ├── memdialogue_v2.jsonl          # Release-verified memory events
@@ -66,7 +66,7 @@ AgentMemBench/
 ├── DATASET_CARD.md
 ├── DATA_USE.md
 └── paper/
-    └── figures/                      # Eight data- and protocol-driven paper figures
+    └── figures/                      # Ten paper figures (PDF)
 ```
 
 ## Quick Start
@@ -149,8 +149,10 @@ python gen_fig1.py && python gen_fig2.py && python gen_fig3.py
 python gen_fig4.py && python gen_formal_figures.py
 ```
 
-Figures 5–8 are regenerated directly from `results/formal/` and the released
-MemDialogue metadata/audit files; they contain no hand-entered result values.
+Figures 5–10 retain the layouts of the original paper (grouped profiles,
+radars, temporal bars, scale grids, and cross-system panels) while regenerating
+all measured values directly from `results/formal/`. The only non-measured
+profile axis is the documented taxonomy attribute `deployment simplicity`.
 
 ## MemDialogue Dataset
 

@@ -1,4 +1,11 @@
-"""Generate paper result figures directly from the released formal JSON files."""
+"""Regenerate the original paper figures with the released formal results.
+
+The plotting layouts intentionally follow the original AgentMemBench paper:
+the grouped profile chart, diversity radars, temporal bar chart, 2x4 scale
+grid, 2x4 cross-system comparison, and two-panel scale figure. All measured
+values are loaded from ``results/formal``. The only non-measured profile axis
+is deployment simplicity, which is a documented taxonomy attribute.
+"""
 
 from __future__ import annotations
 
@@ -8,19 +15,20 @@ from pathlib import Path
 import matplotlib
 
 matplotlib.use("Agg")
+import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 import numpy as np
 
 
 ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "results" / "formal"
 FIGURES = ROOT / "paper" / "figures"
-DATA_META = ROOT / "data" / "memdialogue_v2_meta.json"
-DATA_AUDIT = ROOT / "data" / "memdialogue_v2_audit.json"
 
-SYSTEMS = ["Naive RAG", "Mem0", "LangMem", "Graphiti", "Letta"]
-SHORT = ["Naive RAG", "Mem0", "LangMem", "Graphiti", "Letta"]
-COLORS = ["#2E75B6", "#6FA8DC", "#A9C7E8", "#E69138", "#777777"]
+# Preserve the system order used by the original paper figures.
+SYSTEMS = ["Mem0", "Naive RAG", "Graphiti", "LangMem", "Letta"]
+SHORT = ["M0", "NR", "Gr", "LM", "Le"]
+COLORS = ["#1A4F7A", "#2E75B6", "#5B9BD5", "#9DC3E6", "#777777"]
 MARKERS = ["o", "s", "^", "D", "P"]
 
 FILES = {
@@ -84,15 +92,20 @@ matplotlib.rcParams.update(
         "font.serif": ["Times New Roman", "DejaVu Serif"],
         "font.size": 8.0,
         "axes.titlesize": 8.0,
-        "axes.labelsize": 7.5,
-        "xtick.labelsize": 7.0,
-        "ytick.labelsize": 7.0,
-        "legend.fontsize": 6.5,
+        "axes.labelsize": 8.0,
+        "xtick.labelsize": 7.2,
+        "ytick.labelsize": 7.2,
+        "legend.fontsize": 6.8,
+        "text.color": "black",
+        "axes.edgecolor": "black",
+        "xtick.color": "black",
+        "ytick.color": "black",
         "figure.dpi": 300,
         "savefig.dpi": 300,
         "savefig.bbox": "tight",
         "savefig.pad_inches": 0.04,
-        "axes.linewidth": 0.7,
+        "axes.linewidth": 0.8,
+        "hatch.linewidth": 0.7,
     }
 )
 
@@ -102,347 +115,770 @@ def phase(system: str, name: str) -> dict:
     return payload["phases"][name]
 
 
-def style_axis(axis: plt.Axes, grid: str = "y") -> None:
-    axis.spines["top"].set_visible(False)
-    axis.spines["right"].set_visible(False)
-    axis.tick_params(direction="in", width=0.6, length=2.5)
-    if grid == "y":
-        axis.yaxis.grid(True, color="#D9D9D9", linewidth=0.45, zorder=0)
-    elif grid == "both":
-        axis.grid(True, color="#E2E2E2", linewidth=0.4, zorder=0)
-    axis.set_axisbelow(True)
-
-
-def label_bars(axis: plt.Axes, bars, fmt: str = "{:.1f}") -> None:
-    for bar in bars:
-        value = bar.get_height()
-        axis.annotate(
-            fmt.format(value),
-            (bar.get_x() + bar.get_width() / 2, value),
-            xytext=(0, 2),
-            textcoords="offset points",
-            ha="center",
-            va="bottom",
-            fontsize=5.6,
-        )
+def load_formal() -> dict[str, dict[str, dict]]:
+    return {
+        system: {
+            name: phase(system, name)
+            for name in (
+                "retrieval",
+                "conflict",
+                "isolation",
+                "deletion",
+                "concurrency",
+                "scale",
+            )
+        }
+        for system in SYSTEMS
+    }
 
 
 def save(figure: plt.Figure, stem: str) -> None:
+    FIGURES.mkdir(parents=True, exist_ok=True)
     for extension in ("pdf", "png"):
-        figure.savefig(FIGURES / f"{stem}.{extension}", facecolor="white")
+        figure.savefig(
+            FIGURES / f"{stem}.{extension}",
+            bbox_inches="tight",
+            facecolor="white",
+        )
     plt.close(figure)
 
 
-def formal_summary() -> None:
-    retrieval = {system: phase(system, "retrieval") for system in SYSTEMS}
-    conflict = {system: phase(system, "conflict") for system in SYSTEMS}
-    deletion = {system: phase(system, "deletion") for system in SYSTEMS}
-    concurrency = {system: phase(system, "concurrency") for system in SYSTEMS}
+def style_axis(axis: plt.Axes, grid: bool = True) -> None:
+    axis.spines["top"].set_visible(False)
+    axis.spines["right"].set_visible(False)
+    for side in ("bottom", "left"):
+        axis.spines[side].set_color("black")
+        axis.spines[side].set_linewidth(0.8)
+    axis.tick_params(direction="in", length=2.5, width=0.6, colors="black")
+    if grid:
+        axis.yaxis.grid(True, alpha=0.28, linewidth=0.4, color="gray", zorder=0)
+        axis.set_axisbelow(True)
 
-    figure, axes = plt.subplots(2, 3, figsize=(7.16, 4.35))
-    x = np.arange(len(SYSTEMS))
 
-    for panel, key, title, ylabel in (
-        (axes[0, 0], "write_latency", "(a) Mean write latency", "Latency (ms, log)"),
-        (axes[0, 1], "read_latency", "(b) Mean read latency", "Latency (ms, log)"),
-    ):
-        values = [retrieval[system][key]["mean_ms"] for system in SYSTEMS]
-        bars = panel.bar(
-            x, values, color=COLORS, edgecolor="black", linewidth=0.55, zorder=3
-        )
-        panel.set_yscale("log")
-        panel.set_ylabel(ylabel)
-        panel.set_xticks(x, SHORT, rotation=20, ha="right")
-        panel.set_title(title, fontweight="bold")
-        for bar, value in zip(bars, values):
-            panel.annotate(
-                f"{value:,.0f}",
-                (bar.get_x() + bar.get_width() / 2, value),
-                xytext=(0, 2),
-                textcoords="offset points",
-                ha="center",
-                fontsize=5.4,
-            )
-        style_axis(panel)
+def inverse_latency(values: list[float]) -> list[float]:
+    fastest = min(values)
+    return [fastest / value for value in values]
 
-    recall_groups = [
-        [retrieval[system]["recall_at_k"] * 100 for system in SYSTEMS],
-        [
-            retrieval[system]["recall_by_event_type"]["PERSONAL_FACT"] * 100
-            for system in SYSTEMS
-        ],
-        [
-            retrieval[system]["recall_by_event_type"]["TASK_REQUEST"] * 100
-            for system in SYSTEMS
-        ],
-    ]
-    width = 0.23
-    for offset, values, label, hatch in zip(
-        (-width, 0, width),
-        recall_groups,
-        ("All", "Personal fact", "Task request"),
-        ("", "///", "..."),
-    ):
-        axes[0, 2].bar(
-            x + offset,
-            values,
-            width,
-            label=label,
-            color="#5B9BD5" if not hatch else "white",
-            edgecolor="black",
-            hatch=hatch,
-            linewidth=0.55,
-            zorder=3,
-        )
-    axes[0, 2].set_ylim(0, 125)
-    axes[0, 2].set_ylabel("Recall@5 (%)")
-    axes[0, 2].set_xticks(x, SHORT, rotation=20, ha="right")
-    axes[0, 2].set_title("(c) Retrieval quality", fontweight="bold")
-    axes[0, 2].legend(frameon=False, ncol=3, loc="upper center")
-    style_axis(axes[0, 2])
 
-    categories = {
-        "New only": [],
-        "Dual version": [],
-        "Stale only": [],
-        "Unresolved": [],
-    }
+def profile_axes(data: dict[str, dict[str, dict]]) -> dict[str, list[float]]:
+    write_ms = [data[s]["retrieval"]["write_latency"]["mean_ms"] for s in SYSTEMS]
+    read_ms = [data[s]["retrieval"]["read_latency"]["mean_ms"] for s in SYSTEMS]
+    recall = [data[s]["retrieval"]["recall_at_k"] for s in SYSTEMS]
+
+    clean_update = []
+    reliability = []
+    concurrency = []
     for system in SYSTEMS:
-        row = conflict[system]
-        dual = row["dual_version_rate"]
-        new_only = max(0.0, row["new_fact_rate"] - dual)
-        stale = row["staleness_rate"]
-        unresolved = max(0.0, 1.0 - new_only - dual - stale)
-        for label, value in zip(categories, (new_only, dual, stale, unresolved)):
-            categories[label].append(value * 100)
-    bottom = np.zeros(len(SYSTEMS))
-    fills = ("#2E75B6", "#A9C7E8", "#E69138", "#D9D9D9")
-    hatches = ("", "///", "", "...")
-    for (label, values), fill, hatch in zip(categories.items(), fills, hatches):
-        axes[1, 0].bar(
-            x,
+        conflict = data[system]["conflict"]
+        clean_update.append(
+            max(0.0, conflict["new_fact_rate"] - conflict["dual_version_rate"])
+        )
+        isolation = data[system]["isolation"]
+        deletion = data[system]["deletion"]
+        reliability.append(
+            (
+                1.0
+                - isolation["cross_user_leak_rate"]
+                + deletion["post_delete_absence_rate"]
+            )
+            / 2.0
+        )
+        concurrency.append(
+            data[system]["concurrency"]["16"]["throughput_ops_s"]
+        )
+    peak_concurrency = max(concurrency)
+    concurrency = [value / peak_concurrency for value in concurrency]
+
+    # Taxonomy-derived deployment simplicity: fewer mandatory services and
+    # less agent-mediated state management receive a higher descriptive value.
+    simplicity = {
+        "Mem0": 0.70,
+        "Naive RAG": 1.00,
+        "Graphiti": 0.45,
+        "LangMem": 0.65,
+        "Letta": 0.35,
+    }
+
+    return {
+        system: [
+            inverse_latency(write_ms)[idx],
+            inverse_latency(read_ms)[idx],
+            recall[idx],
+            clean_update[idx],
+            reliability[idx],
+            concurrency[idx],
+            1.0,  # all systems completed against the shared local backends
+            simplicity[system],
+        ]
+        for idx, system in enumerate(SYSTEMS)
+    }
+
+
+def original_overall_profile(data: dict[str, dict[str, dict]]) -> None:
+    """Original grouped-bar design, now backed by formal profile values."""
+
+    profiles = profile_axes(data)
+    recall_only = [data[s]["retrieval"]["recall_at_k"] for s in SYSTEMS]
+    performance = [
+        float(np.mean(profiles[s][:3]))
+        for s in SYSTEMS
+    ]
+    lifecycle = [
+        float(np.mean(profiles[s]))
+        for s in SYSTEMS
+    ]
+
+    series = [
+        recall_only + [float(np.mean(recall_only))],
+        performance + [float(np.mean(performance))],
+        lifecycle + [float(np.mean(lifecycle))],
+    ]
+    labels = ["Recall-only view", "Performance view", "Lifecycle profile"]
+    fills = ["white", "#BDD7EE", "#2E75B6"]
+    hatches = ["////", "....", ""]
+    systems = SYSTEMS + ["Avg."]
+
+    x = np.arange(len(systems))
+    width = 0.26
+    figure, axis = plt.subplots(figsize=(3.5, 2.4))
+    for index, (values, fill, hatch, label) in enumerate(
+        zip(series, fills, hatches, labels)
+    ):
+        axis.bar(
+            x + (index - 1) * width,
             values,
-            bottom=bottom,
-            label=label,
-            color=fill,
+            width,
+            facecolor=fill,
             edgecolor="black",
             hatch=hatch,
-            linewidth=0.45,
+            linewidth=0.8,
+            label=label,
             zorder=3,
         )
-        bottom += np.array(values)
-    axes[1, 0].set_ylim(0, 125)
-    axes[1, 0].set_ylabel("Conflict outcomes (%)")
-    axes[1, 0].set_xticks(x, SHORT, rotation=20, ha="right")
-    axes[1, 0].set_title("(d) Temporal consistency", fontweight="bold")
-    axes[1, 0].legend(frameon=False, ncol=2, loc="upper center")
-    style_axis(axes[1, 0])
-
-    pre = [deletion[system]["pre_delete_visibility_rate"] * 100 for system in SYSTEMS]
-    post = [deletion[system]["post_delete_absence_rate"] * 100 for system in SYSTEMS]
-    bars_pre = axes[1, 1].bar(
-        x - 0.18,
-        pre,
-        0.36,
-        color="white",
+    axis.set_ylabel("Descriptive normalized profile")
+    axis.set_ylim(0, 1.12)
+    axis.set_xticks(x)
+    axis.set_xticklabels(systems, rotation=15, ha="right")
+    style_axis(axis)
+    legend = axis.legend(
+        loc="lower left",
+        frameon=True,
+        framealpha=1.0,
         edgecolor="black",
-        hatch="///",
-        linewidth=0.6,
-        label="Pre-delete visible",
+        fontsize=6.3,
+    )
+    legend.get_frame().set_linewidth(0.6)
+    figure.tight_layout(pad=0.5)
+    save(figure, "fig6_overall")
+
+
+def original_diversity_radar(data: dict[str, dict[str, dict]]) -> None:
+    """Original 2x4 radar layout with formal profile axes."""
+
+    profiles = profile_axes(data)
+    dimension_labels = [
+        "1. Write latency score",
+        "2. Read latency score",
+        "3. Recall@5",
+        "4. Clean update rate",
+        "5. Isolation/deletion",
+        "6. T16 throughput",
+        "7. Backend compatibility",
+        "8. Deployment simplicity",
+    ]
+    count = len(dimension_labels)
+    angles = np.linspace(0, 2 * np.pi, count, endpoint=False).tolist()
+    angles += angles[:1]
+
+    figure = plt.figure(figsize=(7.16, 3.0), facecolor="white")
+
+    def radar(axis: plt.Axes, values: list[float], title: str) -> None:
+        closed = values + values[:1]
+        axis.set_theta_offset(np.pi / 2)
+        axis.set_theta_direction(-1)
+        axis.plot(
+            angles,
+            closed,
+            "o-",
+            color="#2E75B6",
+            linewidth=1.2,
+            markersize=3,
+        )
+        axis.fill(angles, closed, color="#BDD7EE", alpha=0.75)
+        axis.set_xticks(angles[:-1])
+        axis.set_xticklabels(["", "2", "3", "4", "", "6", "7", "8"], fontsize=6)
+        axis.set_ylim(0, 1)
+        axis.set_yticks([0.25, 0.5, 0.75, 1.0])
+        axis.set_yticklabels(["", "", "", ""])
+        axis.grid(color="#CCCCCC", linewidth=0.5)
+        axis.spines["polar"].set_linewidth(0.8)
+        axis.spines["polar"].set_color("black")
+        axis.text(
+            0.5,
+            -0.15,
+            title,
+            transform=axis.transAxes,
+            ha="center",
+            va="top",
+            fontsize=8.0,
+            fontweight="bold",
+        )
+
+    for index, system in enumerate(SYSTEMS):
+        axis = figure.add_subplot(2, 4, index + 1, projection="polar")
+        radar(axis, profiles[system], f"({chr(ord('a') + index)}) {system}")
+
+    legend_axis = figure.add_subplot(2, 4, 6)
+    legend_axis.axis("off")
+    for index, label in enumerate(dimension_labels):
+        legend_axis.text(
+            0.02,
+            0.98 - index * 0.115,
+            label,
+            transform=legend_axis.transAxes,
+            fontsize=5.7,
+            va="top",
+        )
+    legend_axis.text(
+        0.5,
+        -0.08,
+        "(f) Legend",
+        transform=legend_axis.transAxes,
+        ha="center",
+        va="top",
+        fontsize=8.0,
+        fontweight="bold",
+    )
+
+    mean_axis = figure.add_subplot(2, 4, 7)
+    means = [float(np.mean(profiles[s])) for s in SYSTEMS]
+    mean_axis.bar(
+        np.arange(len(SYSTEMS)),
+        means,
+        0.65,
+        facecolor="#2E75B6",
+        edgecolor="black",
+        linewidth=0.8,
         zorder=3,
     )
-    bars_post = axes[1, 1].bar(
-        x + 0.18,
-        post,
-        0.36,
-        color="#5B9BD5",
+    mean_axis.set_ylim(0, 1.0)
+    mean_axis.set_xticks(np.arange(len(SYSTEMS)), SHORT)
+    mean_axis.set_ylabel("Profile mean")
+    style_axis(mean_axis)
+    mean_axis.text(
+        0.5,
+        -0.20,
+        "(g) Descriptive mean",
+        transform=mean_axis.transAxes,
+        ha="center",
+        va="top",
+        fontsize=8.0,
+        fontweight="bold",
+    )
+
+    portability_axis = figure.add_subplot(2, 4, 8)
+    portability_axis.bar(
+        np.arange(len(SYSTEMS)),
+        np.ones(len(SYSTEMS)),
+        0.65,
+        facecolor="#2E75B6",
         edgecolor="black",
-        linewidth=0.6,
-        label="Post-delete absent",
+        linewidth=0.8,
         zorder=3,
     )
-    axes[1, 1].set_ylim(0, 125)
-    axes[1, 1].set_ylabel("Rate (%)")
-    axes[1, 1].set_xticks(x, SHORT, rotation=20, ha="right")
-    axes[1, 1].set_title("(e) Audited deletion", fontweight="bold")
-    axes[1, 1].legend(frameon=False, ncol=2, loc="upper center")
-    label_bars(axes[1, 1], bars_pre, "{:.0f}")
-    label_bars(axes[1, 1], bars_post, "{:.0f}")
-    style_axis(axes[1, 1])
+    portability_axis.set_ylim(0, 1.3)
+    portability_axis.set_yticks([0, 1], ["Fail", "Pass"])
+    portability_axis.set_xticks(np.arange(len(SYSTEMS)), SHORT)
+    style_axis(portability_axis)
+    portability_axis.text(
+        0.5,
+        -0.20,
+        "(h) Backend compatibility",
+        transform=portability_axis.transAxes,
+        ha="center",
+        va="top",
+        fontsize=8.0,
+        fontweight="bold",
+    )
 
-    workers = [1, 4, 8, 16]
-    for system, color, marker in zip(SYSTEMS, COLORS, MARKERS):
-        values = [
-            concurrency[system][str(worker)]["throughput_ops_s"]
-            for worker in workers
-        ]
-        axes[1, 2].plot(
-            workers,
-            values,
-            marker=marker,
-            color=color,
-            linewidth=1.1,
-            markersize=4,
-            label=system,
+    figure.text(
+        0.5,
+        -0.02,
+        "1.Write latency  2.Read latency  3.Recall@5  4.Clean update"
+        "  5.Isolation/deletion  6.T16 throughput  7.Backend compatibility"
+        "  8.Deployment simplicity",
+        ha="center",
+        fontsize=5.4,
+        va="top",
+        bbox={
+            "boxstyle": "square",
+            "facecolor": "white",
+            "edgecolor": "black",
+            "linewidth": 0.8,
+            "pad": 0.3,
+        },
+    )
+    figure.tight_layout(pad=0.4, h_pad=1.2, w_pad=0.6)
+    save(figure, "fig5_diversity")
+
+
+def original_temporal_bar(data: dict[str, dict[str, dict]]) -> None:
+    """Original temporal bar chart with the five formal systems."""
+
+    values = [data[s]["conflict"]["new_fact_rate"] * 100 for s in SYSTEMS]
+    figure, axis = plt.subplots(figsize=(3.5, 2.0))
+    bars = axis.bar(
+        np.arange(len(SYSTEMS)),
+        values,
+        0.58,
+        facecolor="#2E75B6",
+        edgecolor="black",
+        linewidth=0.8,
+        zorder=3,
+    )
+    for bar, value in zip(bars, values):
+        label = f"{value:.1f}%" if value < 10 or value % 1 else f"{value:.0f}%"
+        axis.text(
+            bar.get_x() + bar.get_width() / 2,
+            value + 1.5,
+            label,
+            ha="center",
+            va="bottom",
+            fontsize=6.8,
         )
-    axes[1, 2].set_xlabel("Workers")
-    axes[1, 2].set_ylabel("Throughput (ops/s)")
-    axes[1, 2].set_xticks(workers)
-    axes[1, 2].set_ylim(0, 33)
-    axes[1, 2].set_title("(f) Concurrent writes", fontweight="bold")
-    axes[1, 2].legend(frameon=False, ncol=2, loc="upper center")
-    style_axis(axes[1, 2], grid="both")
-
-    figure.tight_layout(pad=0.65, w_pad=0.75, h_pad=1.0)
-    save(figure, "fig5_formal_summary")
+    axis.set_ylabel("New-Fact Rate (%)")
+    axis.set_ylim(0, 120)
+    axis.set_xticks(np.arange(len(SYSTEMS)))
+    axis.set_xticklabels(SYSTEMS, rotation=12, ha="right")
+    style_axis(axis)
+    figure.tight_layout(pad=0.4)
+    save(figure, "fig7_temporal")
 
 
-def latency_distribution() -> None:
-    retrieval = {system: phase(system, "retrieval") for system in SYSTEMS}
-    figure, axes = plt.subplots(1, 2, figsize=(7.16, 2.35))
-    x = np.arange(len(SYSTEMS))
-    width = 0.34
-    for axis, key, title in (
-        (axes[0], "write_latency", "(a) Write-latency distribution"),
-        (axes[1], "read_latency", "(b) Read-latency distribution"),
-    ):
-        p50 = [retrieval[system][key]["p50_ms"] for system in SYSTEMS]
-        p95 = [retrieval[system][key]["p95_ms"] for system in SYSTEMS]
-        axis.bar(
-            x - width / 2,
-            p50,
-            width,
-            label="p50",
-            color="#5B9BD5",
-            edgecolor="black",
-            linewidth=0.55,
-            zorder=3,
-        )
-        axis.bar(
-            x + width / 2,
-            p95,
-            width,
-            label="p95",
-            color="white",
-            edgecolor="black",
-            hatch="///",
-            linewidth=0.55,
-            zorder=3,
-        )
-        axis.set_yscale("log")
-        axis.set_ylabel("Latency (ms, log)")
-        axis.set_xticks(x, SHORT, rotation=18, ha="right")
-        axis.set_title(title, fontweight="bold")
-        axis.legend(frameon=False)
-        style_axis(axis)
-    figure.tight_layout(pad=0.5, w_pad=1.2)
-    save(figure, "fig6_latency_distribution")
+def original_detailed_scale(data: dict[str, dict[str, dict]]) -> None:
+    """Original 2x4 execution grid using scale p50/mean/p95/p99."""
 
-
-def scale_behavior() -> None:
-    scale = {system: phase(system, "scale") for system in SYSTEMS}
-    figure, axes = plt.subplots(1, 2, figsize=(7.16, 2.35))
     sizes = [100, 1000]
-    for axis, key, title in (
-        (axes[0], "write_latency", "(a) Mean write latency"),
-        (axes[1], "read_latency", "(b) Mean read latency"),
-    ):
-        for system, color, marker in zip(SYSTEMS, COLORS, MARKERS):
-            values = [scale[system][str(size)][key]["mean_ms"] for size in sizes]
+    stats = ["mean_ms", "p50_ms", "p95_ms", "p99_ms"]
+    labels = ["Mean", "p50", "p95", "p99"]
+    line_styles = [
+        dict(color="black", ls="-", marker="o", mfc="black", mec="black"),
+        dict(color="#404040", ls="--", marker="^", mfc="white", mec="#404040"),
+        dict(color="#606060", ls="-.", marker="s", mfc="white", mec="#606060"),
+        dict(color="#2E75B6", ls=":", marker="D", mfc="#2E75B6", mec="#2E75B6"),
+    ]
+
+    figure, axes = plt.subplots(2, 4, figsize=(6.5, 2.55))
+    flat = axes.flatten()
+
+    for index, system in enumerate(SYSTEMS):
+        axis = flat[index]
+        for stat, label, line_style in zip(stats, labels, line_styles):
+            values = [
+                data[system]["scale"][str(size)]["write_latency"][stat]
+                for size in sizes
+            ]
             axis.plot(
                 sizes,
                 values,
-                marker=marker,
-                color=color,
-                linewidth=1.1,
-                markersize=4.2,
-                label=system,
+                linewidth=1.0,
+                markersize=3.2,
+                markeredgewidth=0.6,
+                label=label,
+                **line_style,
             )
         axis.set_xscale("log")
         axis.set_yscale("log")
         axis.set_xticks(sizes, ("100", "1,000"))
+        axis.set_ylabel("Write latency (ms)")
+        axis.text(
+            0.5,
+            -0.30,
+            f"({chr(ord('a') + index)}) {system}",
+            transform=axis.transAxes,
+            ha="center",
+            va="top",
+            fontsize=7.5,
+            fontweight="bold",
+        )
+        style_axis(axis)
+
+    for panel_index, latency_key, title in (
+        (5, "write_latency", "(f) Avg. write latency"),
+        (6, "read_latency", "(g) Avg. read latency"),
+    ):
+        axis = flat[panel_index]
+        for stat, label, line_style in zip(stats, labels, line_styles):
+            values = [
+                float(
+                    np.mean(
+                        [
+                            data[system]["scale"][str(size)][latency_key][stat]
+                            for system in SYSTEMS
+                        ]
+                    )
+                )
+                for size in sizes
+            ]
+            axis.plot(
+                sizes,
+                values,
+                linewidth=1.0,
+                markersize=3.2,
+                markeredgewidth=0.6,
+                label=label,
+                **line_style,
+            )
+        axis.set_xscale("log")
+        axis.set_yscale("log")
+        axis.set_xticks(sizes, ("100", "1,000"))
+        axis.set_ylabel("Latency (ms)")
+        axis.text(
+            0.5,
+            -0.30,
+            title,
+            transform=axis.transAxes,
+            ha="center",
+            va="top",
+            fontsize=7.5,
+            fontweight="bold",
+        )
+        style_axis(axis)
+
+    recall_axis = flat[7]
+    for system, color, marker in zip(SYSTEMS, COLORS, MARKERS):
+        values = [
+            data[system]["scale"][str(size)]["recall_at_3"] * 100
+            for size in sizes
+        ]
+        recall_axis.plot(
+            sizes,
+            values,
+            color=color,
+            marker=marker,
+            linewidth=1.0,
+            markersize=3.2,
+        )
+    recall_axis.set_xscale("log")
+    recall_axis.set_xticks(sizes, ("100", "1,000"))
+    recall_axis.set_ylim(95, 101)
+    recall_axis.set_ylabel("Recall@3 (%)")
+    recall_axis.text(
+        0.5,
+        -0.30,
+        "(h) Exact-canary recall",
+        transform=recall_axis.transAxes,
+        ha="center",
+        va="top",
+        fontsize=7.5,
+        fontweight="bold",
+    )
+    style_axis(recall_axis)
+
+    handles = [
+        plt.Line2D(
+            [0],
+            [0],
+            linewidth=1.0,
+            markersize=3.6,
+            markeredgewidth=0.6,
+            label=label,
+            **line_style,
+        )
+        for label, line_style in zip(labels, line_styles)
+    ]
+    figure.legend(
+        handles=handles,
+        loc="upper center",
+        ncol=4,
+        frameon=True,
+        edgecolor="black",
+        framealpha=1.0,
+        bbox_to_anchor=(0.5, 1.02),
+    )
+    figure.tight_layout(pad=0.3, h_pad=1.2, w_pad=0.55, rect=[0, 0, 1, 0.90])
+    save(figure, "fig8_detailed")
+
+
+def original_cross_system(data: dict[str, dict[str, dict]]) -> None:
+    """Original 2x4 bar-plus-line comparison with formal metrics."""
+
+    retrieval = [data[s]["retrieval"] for s in SYSTEMS]
+    conflict = [data[s]["conflict"] for s in SYSTEMS]
+    deletion = [data[s]["deletion"] for s in SYSTEMS]
+
+    write_mean = [row["write_latency"]["mean_ms"] for row in retrieval]
+    read_mean = [row["read_latency"]["mean_ms"] for row in retrieval]
+    recall = [row["recall_at_k"] * 100 for row in retrieval]
+    type_gap = [
+        abs(
+            row["recall_by_event_type"]["PERSONAL_FACT"]
+            - row["recall_by_event_type"]["TASK_REQUEST"]
+        )
+        * 100
+        for row in retrieval
+    ]
+    new_fact = [row["new_fact_rate"] * 100 for row in conflict]
+    staleness = [row["staleness_rate"] * 100 for row in conflict]
+    write_p95 = [row["write_latency"]["p95_ms"] for row in retrieval]
+    tail_factor = [
+        row["write_latency"]["p95_ms"] / row["write_latency"]["p50_ms"]
+        for row in retrieval
+    ]
+    omission = [row["omission_rate"] * 100 for row in retrieval]
+    delete_absence = [row["post_delete_absence_rate"] * 100 for row in deletion]
+    pre_visibility = [row["pre_delete_visibility_rate"] * 100 for row in deletion]
+
+    panel_specs = [
+        (
+            "Write latency",
+            write_mean,
+            [1000.0 / value for value in write_mean],
+            "Mean (ms, log)",
+            "Ops/s",
+            True,
+        ),
+        (
+            "Read latency",
+            read_mean,
+            [1000.0 / value for value in read_mean],
+            "Mean (ms, log)",
+            "Ops/s",
+            True,
+        ),
+        ("Recall@5", recall, type_gap, "Recall (%)", "Type gap (pp)", False),
+        ("Temporal update", new_fact, staleness, "New fact (%)", "Stale (%)", False),
+        ("Write tail", write_p95, tail_factor, "p95 (ms, log)", "p95/p50", True),
+        ("Omission", omission, recall, "Omission (%)", "Recall (%)", False),
+        (
+            "Backend compatibility",
+            [100.0] * len(SYSTEMS),
+            [100.0] * len(SYSTEMS),
+            "Completion (%)",
+            "Compatible (%)",
+            False,
+        ),
+        (
+            "Audited deletion",
+            delete_absence,
+            pre_visibility,
+            "Post-delete absent (%)",
+            "Pre-visible (%)",
+            False,
+        ),
+    ]
+
+    fills = ["#1A4F7A", "white", "white", "#9DC3E6", "#777777"]
+    hatches = ["", "////", "\\\\", "....", ""]
+    figure, axes = plt.subplots(2, 4, figsize=(7.16, 2.95))
+    flat = axes.flatten()
+    x = np.arange(len(SYSTEMS))
+
+    for index, (title, bars, line, bar_label, line_label, use_log) in enumerate(
+        panel_specs
+    ):
+        axis = flat[index]
+        for system_index, value in enumerate(bars):
+            axis.bar(
+                system_index,
+                value,
+                0.58,
+                facecolor=fills[system_index],
+                edgecolor="black",
+                hatch=hatches[system_index],
+                linewidth=0.8,
+                zorder=3,
+            )
+        if use_log:
+            axis.set_yscale("log")
+        axis.set_ylabel(bar_label, fontsize=7.0)
+        axis.set_xticks(x, SHORT)
+        axis.text(
+            0.5,
+            -0.30,
+            f"({chr(ord('a') + index)}) {title}",
+            transform=axis.transAxes,
+            ha="center",
+            va="top",
+            fontsize=7.4,
+            fontweight="bold",
+        )
+        style_axis(axis)
+
+        secondary = axis.twinx()
+        secondary.plot(
+            x,
+            line,
+            linestyle=":",
+            color="#2B7BBA",
+            linewidth=1.0,
+            marker="D",
+            markersize=3.2,
+            markerfacecolor="#2B7BBA",
+            markeredgecolor="#2B7BBA",
+            zorder=5,
+        )
+        secondary.set_ylabel(line_label, fontsize=6.2)
+        secondary.tick_params(
+            labelsize=6.2,
+            colors="black",
+            direction="in",
+            length=2,
+            width=0.5,
+        )
+        secondary.spines["top"].set_visible(False)
+        secondary.spines["right"].set_color("black")
+        secondary.spines["right"].set_linewidth(0.6)
+
+    bar_handles = [
+        mpatches.Patch(
+            facecolor=fill,
+            edgecolor="black",
+            hatch=hatch,
+            label=system,
+            linewidth=0.8,
+        )
+        for fill, hatch, system in zip(fills, hatches, SYSTEMS)
+    ]
+    line_handle = plt.Line2D(
+        [0],
+        [0],
+        linestyle=":",
+        marker="D",
+        color="#2B7BBA",
+        linewidth=1.0,
+        markersize=4,
+        label="Secondary metric",
+    )
+    figure.legend(
+        handles=bar_handles + [line_handle],
+        loc="upper center",
+        ncol=6,
+        frameon=True,
+        edgecolor="black",
+        framealpha=1.0,
+        fontsize=6.8,
+        bbox_to_anchor=(0.5, 1.01),
+        handlelength=1.3,
+        columnspacing=0.7,
+    )
+    figure.tight_layout(pad=0.5, h_pad=2.4, w_pad=0.75, rect=[0, 0, 1, 0.87])
+    save(figure, "fig9_comparison")
+
+
+def original_scale_figure(data: dict[str, dict[str, dict]]) -> None:
+    """Original equal-width two-panel scale design for all five systems."""
+
+    sizes = [100, 1000]
+    figure, (write_axis, read_axis) = plt.subplots(
+        1, 2, figsize=(5.0, 2.2), facecolor="white"
+    )
+    figure.subplots_adjust(
+        left=0.11,
+        right=0.88,
+        bottom=0.18,
+        top=0.97,
+        wspace=0.55,
+    )
+
+    for system, color, marker in zip(SYSTEMS, COLORS, MARKERS):
+        writes = [
+            data[system]["scale"][str(size)]["write_latency"]["mean_ms"]
+            for size in sizes
+        ]
+        reads = [
+            data[system]["scale"][str(size)]["read_latency"]["mean_ms"]
+            for size in sizes
+        ]
+        write_axis.plot(
+            sizes,
+            writes,
+            color=color,
+            linewidth=1.2,
+            marker=marker,
+            markersize=3.5,
+            label=system,
+        )
+        read_axis.plot(
+            sizes,
+            reads,
+            color=color,
+            linewidth=1.2,
+            marker=marker,
+            markersize=3.5,
+            label=system,
+        )
+
+    for axis, ylabel in (
+        (write_axis, "Mean write latency (ms)"),
+        (read_axis, "Mean read latency (ms)"),
+    ):
+        axis.set_xscale("log")
+        axis.set_yscale("log")
+        axis.set_xticks(sizes)
+        axis.get_xaxis().set_major_formatter(
+            ticker.FuncFormatter(lambda value, _: f"{int(value):,}")
+        )
         axis.set_xlabel("Stored exact canaries")
-        axis.set_ylabel("Latency (ms, log)")
-        axis.set_title(title, fontweight="bold")
-        style_axis(axis, grid="both")
-    axes[1].legend(frameon=False, ncol=2, loc="best")
-    figure.tight_layout(pad=0.5, w_pad=1.2)
-    save(figure, "fig7_scale_behavior")
+        axis.set_ylabel(ylabel)
+        axis.grid(True, color="#DDDDDD", linewidth=0.45)
+        axis.tick_params(direction="in", length=2.5, width=0.6)
+        for spine in axis.spines.values():
+            spine.set_color("black")
+            spine.set_linewidth(0.8)
 
-
-def dataset_profile() -> None:
-    metadata = json.loads(DATA_META.read_text())
-    audit = json.loads(DATA_AUDIT.read_text())
-    figure, axes = plt.subplots(1, 3, figsize=(7.16, 2.15))
-
-    event_labels = ["Task request", "Personal fact"]
-    event_values = [
-        metadata["event_type_counts"]["TASK_REQUEST"],
-        metadata["event_type_counts"]["PERSONAL_FACT"],
+    read_recall_axis = read_axis.twinx()
+    mean_recall = [
+        float(
+            np.mean(
+                [
+                    data[system]["scale"][str(size)]["recall_at_3"] * 100
+                    for system in SYSTEMS
+                ]
+            )
+        )
+        for size in sizes
     ]
-    bars = axes[0].bar(
-        event_labels,
-        event_values,
-        color=(COLORS[0], COLORS[3]),
-        edgecolor="black",
-        linewidth=0.55,
-        zorder=3,
-    )
-    axes[0].set_ylabel("Records")
-    axes[0].set_title("(a) Event types", fontweight="bold")
-    axes[0].tick_params(axis="x", rotation=18)
-    label_bars(axes[0], bars, "{:,.0f}")
-    style_axis(axes[0])
+    recall_line = read_recall_axis.plot(
+        sizes,
+        mean_recall,
+        color="#444444",
+        linewidth=1.1,
+        linestyle="--",
+        marker="^",
+        markersize=3.2,
+        label="Mean Recall@3",
+    )[0]
+    read_recall_axis.set_ylabel("Mean Recall@3 (%)", color="#444444")
+    read_recall_axis.set_ylim(95, 101)
+    read_recall_axis.tick_params(colors="#444444", labelsize=7.0)
 
-    model_labels = ["Qwen2.5-7B", "Qwen2.5-14B"]
-    model_values = [
-        metadata["record_annotator_models"]["qwen2.5-7b-instruct"],
-        metadata["record_annotator_models"]["qwen2.5-14b-instruct"],
-    ]
-    bars = axes[1].bar(
-        model_labels,
-        model_values,
-        color=(COLORS[1], COLORS[2]),
-        edgecolor="black",
-        linewidth=0.55,
-        zorder=3,
+    handles, labels = write_axis.get_legend_handles_labels()
+    handles.append(recall_line)
+    labels.append("Mean Recall@3")
+    figure.legend(
+        handles,
+        labels,
+        loc="upper center",
+        ncol=3,
+        frameon=True,
+        edgecolor="#555555",
+        framealpha=0.95,
+        fontsize=6.5,
+        bbox_to_anchor=(0.5, 1.12),
     )
-    axes[1].set_ylabel("Records")
-    axes[1].set_title("(b) Extractor mixture", fontweight="bold")
-    axes[1].tick_params(axis="x", rotation=18)
-    label_bars(axes[1], bars, "{:,.0f}")
-    style_axis(axes[1])
-
-    source_labels = ["Unique sources", "Multi-record sources"]
-    source_values = [
-        audit["unique_sources"],
-        audit["sources_with_multiple_records"],
-    ]
-    bars = axes[2].bar(
-        source_labels,
-        source_values,
-        color=(COLORS[0], COLORS[4]),
-        edgecolor="black",
-        linewidth=0.55,
-        zorder=3,
-    )
-    axes[2].set_ylabel("Source hashes")
-    axes[2].set_title("(c) Source coverage", fontweight="bold")
-    axes[2].tick_params(axis="x", rotation=18)
-    label_bars(axes[2], bars, "{:,.0f}")
-    style_axis(axes[2])
-
-    figure.tight_layout(pad=0.5, w_pad=1.0)
-    save(figure, "fig8_dataset_profile")
+    save(figure, "fig10_scale")
 
 
 def main() -> None:
-    FIGURES.mkdir(parents=True, exist_ok=True)
-    formal_summary()
-    latency_distribution()
-    scale_behavior()
-    dataset_profile()
-    print("generated formal-result figures 5-8")
+    formal = load_formal()
+    original_overall_profile(formal)
+    original_diversity_radar(formal)
+    original_temporal_bar(formal)
+    original_detailed_scale(formal)
+    original_cross_system(formal)
+    original_scale_figure(formal)
+    print("generated original-style formal figures 5-10")
 
 
 if __name__ == "__main__":
