@@ -51,7 +51,8 @@ AgentMemBench/
 │       ├── gen_fig1.py               # Fig 1: Architecture comparison
 │       ├── gen_fig2.py               # Fig 2: Motivation radar chart
 │       ├── gen_fig3.py               # Fig 3: System overview
-│       └── gen_fig4.py               # Fig 4: MemConflict example
+│       ├── gen_fig4.py               # Fig 4: MemConflict example
+│       └── gen_formal_figures.py      # Figs 5–8: Formal results and data profile
 ├── data/
 │   ├── SHA256SUMS                    # Dataset integrity manifest
 │   ├── memdialogue_v2.jsonl          # Release-verified memory events
@@ -65,7 +66,7 @@ AgentMemBench/
 ├── DATASET_CARD.md
 ├── DATA_USE.md
 └── paper/
-    └── figures/                      # Four figures used by the paper (PDF)
+    └── figures/                      # Eight data- and protocol-driven paper figures
 ```
 
 ## Quick Start
@@ -145,8 +146,11 @@ See `DATASET_CARD.md` before rebuilding or redistributing the data.
 ```bash
 cd agentmembench/visualization/
 python gen_fig1.py && python gen_fig2.py && python gen_fig3.py
-python gen_fig4.py
+python gen_fig4.py && python gen_formal_figures.py
 ```
+
+Figures 5–8 are regenerated directly from `results/formal/` and the released
+MemDialogue metadata/audit files; they contain no hand-entered result values.
 
 ## MemDialogue Dataset
 
