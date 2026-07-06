@@ -1,0 +1,15 @@
+{
+  "records": 9170,
+  "event_type_counts": {
+    "TASK_REQUEST": 7000,
+    "PERSONAL_FACT": 2170
+  },
+  "annotator_models": {
+    "qwen2.5-7b-instruct": 7000,
+    "qwen2.5-14b-instruct": 2170
+  },
+  "unique_sources": 8607,
+  "sources_with_multiple_records": 485,
+  "violations": [],
+  "passed": true
+}

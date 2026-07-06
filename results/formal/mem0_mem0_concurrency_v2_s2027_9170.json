@@ -1,0 +1,136 @@
+{
+  "schema_version": "unified-benchmark-v2",
+  "run_id": "mem0_concurrency_v2_s2027_9170",
+  "system": "mem0",
+  "collection": "amb_kdd27_mem0_mem0_concurrency_v2_s2027_9170",
+  "config": {
+    "llm_base_url": "http://127.0.0.1:18000/v1",
+    "llm_model": "qwen2.5-14b-instruct",
+    "embedding_base_url": "http://127.0.0.1:18002/v1",
+    "embedding_model": "bge-m3",
+    "embedding_dims": 1024,
+    "qdrant_url": "http://127.0.0.1:6333",
+    "neo4j_uri": "bolt://127.0.0.1:17687",
+    "output_dir": "results/formal",
+    "history_dir": "results/formal/history",
+    "top_k": 5,
+    "seed": 2027
+  },
+  "arguments": {
+    "system": "mem0",
+    "phases": "concurrency",
+    "data": "data/memdialogue_v2.jsonl",
+    "retrieval_records": 1000,
+    "group_size": 10,
+    "conflict_pairs": 250,
+    "isolation_users": 100,
+    "isolation_facts": 5,
+    "deletion_records": 200,
+    "concurrency_records": 200,
+    "workers": "1,4,8,16",
+    "scales": "100,1000",
+    "scale_read_queries": 200,
+    "top_k": 5,
+    "seed": 2027,
+    "warmup_writes": 5,
+    "run_id": "mem0_concurrency_v2_s2027_9170",
+    "llm_base_url": "http://127.0.0.1:18000/v1",
+    "llm_model": "qwen2.5-14b-instruct",
+    "embedding_base_url": "http://127.0.0.1:18002/v1",
+    "embedding_model": "bge-m3",
+    "embedding_dims": 1024,
+    "qdrant_url": "http://127.0.0.1:6333",
+    "neo4j_uri": "bolt://127.0.0.1:17687",
+    "output_dir": "results/formal",
+    "history_dir": "results/formal/history"
+  },
+  "environment": {
+    "timestamp": "2026-07-04T16:29:51.353044+00:00",
+    "python": "3.11.15",
+    "platform": "Linux-6.8.0-90-generic-x86_64-with-glibc2.35",
+    "packages": {
+      "mem0ai": "2.0.11",
+      "langmem": "0.0.30",
+      "graphiti-core": "0.29.2",
+      "openai": "2.44.0",
+      "qdrant-client": "1.18.0",
+      "numpy": "2.4.6"
+    },
+    "gpus": [
+      "NVIDIA GeForce RTX 4080, 580.82.07",
+      "NVIDIA A100 80GB PCIe, 580.82.07"
+    ]
+  },
+  "phases": {
+    "concurrency": {
+      "1": {
+        "records": 200,
+        "workers": 1,
+        "success_rate": 1.0,
+        "operation_success_rate": 1.0,
+        "materialization_rate": 0.0,
+        "error_count": 0,
+        "error_examples": [],
+        "throughput_ops_s": 3.862095922458102,
+        "latency": {
+          "n": 200,
+          "mean_ms": 258.8528405595571,
+          "p50_ms": 259.36833396553993,
+          "p95_ms": 267.94777186587453,
+          "p99_ms": 269.4208950549364
+        }
+      },
+      "4": {
+        "records": 200,
+        "workers": 4,
+        "success_rate": 1.0,
+        "operation_success_rate": 1.0,
+        "materialization_rate": 0.985,
+        "error_count": 0,
+        "error_examples": [],
+        "throughput_ops_s": 3.233031640039002,
+        "latency": {
+          "n": 200,
+          "mean_ms": 1228.2501463219523,
+          "p50_ms": 1221.6714872047305,
+          "p95_ms": 1395.6603861413894,
+          "p99_ms": 1506.201798375696
+        }
+      },
+      "8": {
+        "records": 200,
+        "workers": 8,
+        "success_rate": 1.0,
+        "operation_success_rate": 1.0,
+        "materialization_rate": 0.08,
+        "error_count": 0,
+        "error_examples": [],
+        "throughput_ops_s": 11.662635976845992,
+        "latency": {
+          "n": 200,
+          "mean_ms": 680.4895597696304,
+          "p50_ms": 569.6245795115829,
+          "p95_ms": 1643.8927931711062,
+          "p99_ms": 2009.4218730181444
+        }
+      },
+      "16": {
+        "records": 200,
+        "workers": 16,
+        "success_rate": 1.0,
+        "operation_success_rate": 1.0,
+        "materialization_rate": 0.98,
+        "error_count": 0,
+        "error_examples": [],
+        "throughput_ops_s": 6.278702478789449,
+        "latency": {
+          "n": 200,
+          "mean_ms": 2506.9430647511035,
+          "p50_ms": 2545.4215463250875,
+          "p95_ms": 3467.297278810292,
+          "p99_ms": 3933.1750185415144
+        }
+      }
+    }
+  }
+}

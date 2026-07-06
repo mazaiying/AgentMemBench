@@ -1,0 +1,40 @@
+# Core dependencies for AgentMemBench
+
+# Versions used for the KDD 2027 reproducibility run.
+
+# --- Local OpenAI-compatible services ---
+openai==2.44.0
+httpx==0.28.1
+sentence-transformers>=3.0.0
+
+# --- Memory systems ---
+mem0ai==2.0.11
+graphiti-core==0.29.2
+langmem==0.0.30
+letta-client==1.12.1
+
+# --- Vector database ---
+qdrant-client==1.18.0
+neo4j==6.2.0
+kuzu==0.11.3
+
+# --- LangChain ecosystem (for LangMem) ---
+langchain-openai==1.3.3
+langgraph==1.2.7
+
+# --- Data processing ---
+datasets==4.8.5
+huggingface-hub==1.22.0
+
+# --- Evaluation utilities ---
+numpy==2.4.6
+pandas==2.3.3
+tqdm>=4.65.0
+
+# --- Visualization ---
+matplotlib>=3.8.0
+seaborn>=0.13.0
+
+# --- Misc ---
+python-dotenv>=1.0.0
+requests>=2.31.0

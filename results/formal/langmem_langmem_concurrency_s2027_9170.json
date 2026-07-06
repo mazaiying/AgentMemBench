@@ -1,0 +1,138 @@
+{
+  "schema_version": "unified-benchmark-v2",
+  "run_id": "langmem_concurrency_s2027_9170",
+  "system": "langmem",
+  "collection": "amb_kdd27_langmem_langmem_concurrency_s2027_9170",
+  "config": {
+    "llm_base_url": "http://127.0.0.1:18000/v1",
+    "llm_model": "qwen2.5-14b-instruct",
+    "embedding_base_url": "http://127.0.0.1:18002/v1",
+    "embedding_model": "bge-m3",
+    "embedding_dims": 1024,
+    "qdrant_url": "http://127.0.0.1:6333",
+    "neo4j_uri": "bolt://127.0.0.1:17687",
+    "letta_url": "http://127.0.0.1:8283",
+    "output_dir": "results/formal",
+    "history_dir": "results/formal/history",
+    "top_k": 5,
+    "seed": 2027
+  },
+  "arguments": {
+    "system": "langmem",
+    "phases": "concurrency",
+    "data": "data/memdialogue_v2.jsonl",
+    "retrieval_records": 1000,
+    "group_size": 10,
+    "conflict_pairs": 250,
+    "isolation_users": 100,
+    "isolation_facts": 5,
+    "deletion_records": 200,
+    "concurrency_records": 200,
+    "workers": "1,4,8,16",
+    "scales": "100,1000",
+    "scale_read_queries": 200,
+    "top_k": 5,
+    "seed": 2027,
+    "warmup_writes": 5,
+    "run_id": "langmem_concurrency_s2027_9170",
+    "llm_base_url": "http://127.0.0.1:18000/v1",
+    "llm_model": "qwen2.5-14b-instruct",
+    "embedding_base_url": "http://127.0.0.1:18002/v1",
+    "embedding_model": "bge-m3",
+    "embedding_dims": 1024,
+    "qdrant_url": "http://127.0.0.1:6333",
+    "neo4j_uri": "bolt://127.0.0.1:17687",
+    "letta_url": "http://127.0.0.1:8283",
+    "output_dir": "results/formal",
+    "history_dir": "results/formal/history"
+  },
+  "environment": {
+    "timestamp": "2026-07-04T19:31:33.584067+00:00",
+    "python": "3.11.15",
+    "platform": "Linux-6.8.0-90-generic-x86_64-with-glibc2.35",
+    "packages": {
+      "mem0ai": "2.0.11",
+      "langmem": "0.0.30",
+      "graphiti-core": "0.29.2",
+      "openai": "2.44.0",
+      "qdrant-client": "1.18.0",
+      "numpy": "2.4.6"
+    },
+    "gpus": [
+      "NVIDIA GeForce RTX 4080, 580.82.07",
+      "NVIDIA A100 80GB PCIe, 580.82.07"
+    ]
+  },
+  "phases": {
+    "concurrency": {
+      "1": {
+        "records": 200,
+        "workers": 1,
+        "success_rate": 1.0,
+        "operation_success_rate": 1.0,
+        "materialization_rate": 1.0,
+        "error_count": 0,
+        "error_examples": [],
+        "throughput_ops_s": 1.0340532401672093,
+        "latency": {
+          "n": 200,
+          "mean_ms": 966.9998042006046,
+          "p50_ms": 947.8846872225404,
+          "p95_ms": 1083.0349917523563,
+          "p99_ms": 1109.7267902083695
+        }
+      },
+      "4": {
+        "records": 200,
+        "workers": 4,
+        "success_rate": 1.0,
+        "operation_success_rate": 1.0,
+        "materialization_rate": 1.0,
+        "error_count": 0,
+        "error_examples": [],
+        "throughput_ops_s": 3.615562932856135,
+        "latency": {
+          "n": 200,
+          "mean_ms": 1100.0033371057361,
+          "p50_ms": 1082.5495971366763,
+          "p95_ms": 1295.1564607210455,
+          "p99_ms": 1350.0370457023382
+        }
+      },
+      "8": {
+        "records": 200,
+        "workers": 8,
+        "success_rate": 1.0,
+        "operation_success_rate": 1.0,
+        "materialization_rate": 1.0,
+        "error_count": 0,
+        "error_examples": [],
+        "throughput_ops_s": 3.572082894789189,
+        "latency": {
+          "n": 200,
+          "mean_ms": 2220.5102193448693,
+          "p50_ms": 2162.2890336439013,
+          "p95_ms": 3093.5890923254183,
+          "p99_ms": 3579.298980962482
+        }
+      },
+      "16": {
+        "records": 200,
+        "workers": 16,
+        "success_rate": 1.0,
+        "operation_success_rate": 1.0,
+        "materialization_rate": 1.0,
+        "error_count": 0,
+        "error_examples": [],
+        "throughput_ops_s": 4.509603902307924,
+        "latency": {
+          "n": 200,
+          "mean_ms": 3478.5331621579826,
+          "p50_ms": 3466.7478976771235,
+          "p95_ms": 4972.416261397301,
+          "p99_ms": 5320.701340567321
+        }
+      }
+    }
+  }
+}

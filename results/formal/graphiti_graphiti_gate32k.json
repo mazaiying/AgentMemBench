@@ -1,0 +1,390 @@
+{
+  "schema_version": "unified-benchmark-v2",
+  "run_id": "graphiti_gate32k",
+  "system": "graphiti",
+  "collection": "amb_kdd27_graphiti_graphiti_gate32k",
+  "config": {
+    "llm_base_url": "http://127.0.0.1:18000/v1",
+    "llm_model": "qwen2.5-14b-instruct",
+    "embedding_base_url": "http://127.0.0.1:18002/v1",
+    "embedding_model": "bge-m3",
+    "embedding_dims": 1024,
+    "qdrant_url": "http://127.0.0.1:6333",
+    "neo4j_uri": "bolt://127.0.0.1:17687",
+    "letta_url": "http://127.0.0.1:8283",
+    "output_dir": "results/formal",
+    "history_dir": "results/formal/history",
+    "top_k": 5,
+    "seed": 2027
+  },
+  "arguments": {
+    "system": "graphiti",
+    "phases": "retrieval,conflict,isolation,deletion,concurrency,scale",
+    "data": "data/memdialogue_v2.jsonl",
+    "retrieval_records": 10,
+    "group_size": 5,
+    "conflict_pairs": 3,
+    "isolation_users": 3,
+    "isolation_facts": 2,
+    "deletion_records": 3,
+    "concurrency_records": 4,
+    "workers": "1,2",
+    "scales": "10",
+    "scale_read_queries": 10,
+    "top_k": 5,
+    "seed": 2027,
+    "warmup_writes": 2,
+    "run_id": "graphiti_gate32k",
+    "llm_base_url": "http://127.0.0.1:18000/v1",
+    "llm_model": "qwen2.5-14b-instruct",
+    "embedding_base_url": "http://127.0.0.1:18002/v1",
+    "embedding_model": "bge-m3",
+    "embedding_dims": 1024,
+    "qdrant_url": "http://127.0.0.1:6333",
+    "neo4j_uri": "bolt://127.0.0.1:17687",
+    "letta_url": "http://127.0.0.1:8283",
+    "output_dir": "results/formal",
+    "history_dir": "results/formal/history"
+  },
+  "environment": {
+    "timestamp": "2026-07-04T19:58:52.651544+00:00",
+    "python": "3.11.15",
+    "platform": "Linux-6.8.0-90-generic-x86_64-with-glibc2.35",
+    "packages": {
+      "mem0ai": "2.0.11",
+      "langmem": "0.0.30",
+      "graphiti-core": "0.29.2",
+      "openai": "2.44.0",
+      "qdrant-client": "1.18.0",
+      "numpy": "2.4.6"
+    },
+    "gpus": [
+      "NVIDIA GeForce RTX 4080, 580.82.07",
+      "NVIDIA A100 80GB PCIe, 580.82.07"
+    ]
+  },
+  "phases": {
+    "retrieval": {
+      "records": 10,
+      "group_size": 5,
+      "write_success_rate": 0.8,
+      "write_materialization_rate": 0.8,
+      "recall_at_k": 0.6,
+      "recall_at_k_95ci": [
+        0.3,
+        0.9
+      ],
+      "omission_rate": 0.4,
+      "recall_by_event_type": {
+        "PERSONAL_FACT": 0.2,
+        "TASK_REQUEST": 1.0
+      },
+      "details": [
+        {
+          "index": 0,
+          "event_type": "PERSONAL_FACT",
+          "source_id": "dd93703998d9d75b8da43b94f45e7e4c",
+          "memory": "The user runs a specific command in EasyMocap to start processing.",
+          "query": "What command does the user run in EasyMocap?",
+          "reference_answer": "python apps/demo/mv1p.py 0_input/project --out 1_output/project --vis_det --vis_repro --undis --sub_vis 1 2 --vis_smpl",
+          "hit": false,
+          "retrieved": [
+            "The user runs a specific command in EasyMocap to start processing.",
+            "The user requested a template for a frame agreement.",
+            "The English language classes are targeted towards the organization staff.",
+            "The user used the Merch by Amazon platform for the T-shirt design.",
+            "The user chose the title 'Starlit nights and open skies' for a T-shirt design."
+          ],
+          "write_latency_ms": 4058.1528302282095,
+          "read_latency_ms": 140.39194397628307
+        },
+        {
+          "index": 1,
+          "event_type": "PERSONAL_FACT",
+          "source_id": "a5c74a4bec41e850837ddb4acbeb8a2f",
+          "memory": "The user chose the title 'Starlit nights and open skies' for a T-shirt design on the Merch by Amazon platform.",
+          "query": "What title did the user choose for their latest T-shirt design?",
+          "reference_answer": "'Starlit nights and open skies'",
+          "hit": true,
+          "retrieved": [
+            "The user chose the title 'Starlit nights and open skies' for a T-shirt design.",
+            "The user used the Merch by Amazon platform for the T-shirt design.",
+            "The user requested a template for a frame agreement.",
+            "The frame agreement is for providing English language classes.",
+            "The black outer box contains two divs."
+          ],
+          "write_latency_ms": 9822.995860129595,
+          "read_latency_ms": 146.088482812047
+        },
+        {
+          "index": 2,
+          "event_type": "PERSONAL_FACT",
+          "source_id": "c1929e548009e18feadcc1c5247d5925",
+          "memory": "The user prefers using both Mac and Windows operating systems.",
+          "query": "Which operating systems does the user prefer?",
+          "reference_answer": "Mac and Windows",
+          "hit": false,
+          "retrieved": [
+            "The user requested a template for a frame agreement.",
+            "The user used the Merch by Amazon platform for the T-shirt design.",
+            "The user chose the title 'Starlit nights and open skies' for a T-shirt design.",
+            "The user runs a specific command in EasyMocap to start processing.",
+            "The English language classes are targeted towards the organization staff."
+          ],
+          "write_latency_ms": 8652.444116771221,
+          "read_latency_ms": 162.16162033379078
+        },
+        {
+          "index": 3,
+          "event_type": "PERSONAL_FACT",
+          "source_id": "b733f0e49d4ba3677fb70d48fbaffb89",
+          "memory": "The user is working on a Fivem NUI with a black outer box centered in the middle of the screen containing two divs, one with two buttons and another with three images.",
+          "query": "What is the user working on?",
+          "reference_answer": "A Fivem NUI with a black outer box centered in the middle of the screen containing two divs, one with two buttons and another with three images.",
+          "hit": false,
+          "retrieved": [
+            "The user runs a specific command in EasyMocap to start processing.",
+            "The frame agreement is for providing English language classes.",
+            "The user requested a template for a frame agreement.",
+            "The user used the Merch by Amazon platform for the T-shirt design.",
+            "The English language classes are targeted towards the organization staff."
+          ],
+          "write_latency_ms": 13333.659868687391,
+          "read_latency_ms": 121.8169741332531
+        },
+        {
+          "index": 4,
+          "event_type": "TASK_REQUEST",
+          "source_id": "f3ad87561cc5d6ccbaceb1592c4c566b",
+          "memory": "The user requested a template for a frame agreement for providing English language classes to organization staff.",
+          "query": "What did the user request regarding a frame agreement?",
+          "reference_answer": "A template for a frame agreement for providing English language classes to organization staff",
+          "hit": true,
+          "retrieved": [
+            "The user requested a template for a frame agreement.",
+            "The frame agreement is for providing English language classes.",
+            "The user runs a specific command in EasyMocap to start processing.",
+            "The user chose the title 'Starlit nights and open skies' for a T-shirt design.",
+            "The user used the Merch by Amazon platform for the T-shirt design."
+          ],
+          "write_latency_ms": 12169.904597103596,
+          "read_latency_ms": 135.77730394899845
+        },
+        {
+          "index": 5,
+          "event_type": "PERSONAL_FACT",
+          "source_id": "24aa291216767a5c198c6068f82faca4",
+          "memory": "The user wants the battle system to rely more on the player's skill rather than luck.",
+          "query": "What does the user want the battle system to rely on?",
+          "reference_answer": "Player's skill",
+          "hit": false,
+          "retrieved": [
+            "The user specifies that Qwen should write an article based on a detailed outline provided by the user.",
+            "The user requests Qwen to act as a proficient SEO writer.",
+            "The user specifies that Qwen should adhere to specific word counts for each section of the article.",
+            "The user requested assistance in checking their manuscript.",
+            "The user requested the assistant to ask questions that would help them explore their feelings and find meaning in life."
+          ],
+          "write_latency_ms": 4376.965023577213,
+          "read_latency_ms": 155.30194714665413
+        },
+        {
+          "index": 6,
+          "event_type": "TASK_REQUEST",
+          "source_id": "54c78b3ed7e738b6b207ea416e739da8",
+          "memory": "The user requested the assistant to ask questions that would help them explore their feelings and find meaning in life.",
+          "query": "What did the user request the assistant to do?",
+          "reference_answer": "The assistant to ask questions that would help them explore their feelings and find meaning in life",
+          "hit": true,
+          "retrieved": [
+            "The user requested the assistant to ask questions that would help them explore their feelings and find meaning in life.",
+            "The user requests Qwen to act as a proficient SEO writer.",
+            "The user requested assistance in checking their manuscript.",
+            "The user specifies that Qwen should adhere to specific word counts for each section of the article.",
+            "The user requested a detailed image prompt for Midjourney AI to visualize Kobe Bryant performing a slam dunk."
+          ],
+          "write_latency_ms": 4700.189653784037,
+          "read_latency_ms": 120.49601599574089
+        },
+        {
+          "index": 7,
+          "event_type": "TASK_REQUEST",
+          "source_id": "0f6ada7ece9763d2e2498de4d41469f2",
+          "memory": "The user wants Qwen to act as a proficient SEO writer who will write an article based on a detailed outline provided by the user, with specific word counts for each section.",
+          "query": "What task did the user request of Qwen?",
+          "reference_answer": "Qwen to act as a proficient SEO writer who will write an article based on a detailed outline provided by the user, with specific word counts for each section",
+          "hit": true,
+          "retrieved": [
+            "The user requests Qwen to act as a proficient SEO writer.",
+            "The user specifies that Qwen should adhere to specific word counts for each section of the article.",
+            "The user specifies that Qwen should write an article based on a detailed outline provided by the user.",
+            "The user requested assistance in checking their manuscript.",
+            "The user requested the assistant to ask questions that would help them explore their feelings and find meaning in life."
+          ],
+          "write_latency_ms": 11008.265418931842,
+          "read_latency_ms": 174.08196814358234
+        },
+        {
+          "index": 8,
+          "event_type": "TASK_REQUEST",
+          "source_id": "b83b32f934f97b50094067da55ff86ca",
+          "memory": "The user requested a detailed image prompt for Midjourney AI to visualize Kobe Bryant performing a slam dunk over LeBron James.",
+          "query": "What did the user request for the image prompt?",
+          "reference_answer": "A detailed image prompt for Midjourney AI to visualize Kobe Bryant performing a slam dunk over LeBron James",
+          "hit": true,
+          "retrieved": [
+            "The user requested a detailed image prompt for Midjourney AI to visualize Kobe Bryant performing a slam dunk.",
+            "The user requested assistance in checking their manuscript.",
+            "The user specifies that Qwen should adhere to specific word counts for each section of the article.",
+            "The user specifies that Qwen should write an article based on a detailed outline provided by the user.",
+            "The user requested the assistant to ask questions that would help them explore their feelings and find meaning in life."
+          ],
+          "write_latency_ms": 9613.938998430967,
+          "read_latency_ms": 114.78163115680218
+        },
+        {
+          "index": 9,
+          "event_type": "TASK_REQUEST",
+          "source_id": "41d320b2b01c632ac0ca742e6c8c9947",
+          "memory": "The user asked for assistance in checking their manuscript to see if there's anything that can be polished.",
+          "query": "What did the user request?",
+          "reference_answer": "Assistance in checking their manuscript to see if there's anything that can be polished",
+          "hit": true,
+          "retrieved": [
+            "The user requested assistance in checking their manuscript.",
+            "The user specifies that Qwen should write an article based on a detailed outline provided by the user.",
+            "The user requested the assistant to ask questions that would help them explore their feelings and find meaning in life.",
+            "The user requests Qwen to act as a proficient SEO writer.",
+            "The user specifies that Qwen should adhere to specific word counts for each section of the article."
+          ],
+          "write_latency_ms": 5643.053516745567,
+          "read_latency_ms": 102.57311165332794
+        }
+      ],
+      "write_latency": {
+        "n": 10,
+        "mean_ms": 8337.956988438964,
+        "p50_ms": 9133.191557601094,
+        "p95_ms": 12809.969996474681,
+        "p99_ms": 13228.92189424485
+      },
+      "read_latency": {
+        "n": 10,
+        "mean_ms": 137.347099930048,
+        "p50_ms": 138.08462396264076,
+        "p95_ms": 168.71781162917614,
+        "p99_ms": 173.0091368407011
+      },
+      "write_mean_95ci_ms": [
+        6387.541984161362,
+        10386.671177200042
+      ],
+      "read_mean_95ci_ms": [
+        123.85508875828236,
+        150.7530257338658
+      ]
+    },
+    "conflict": {
+      "pairs": 3,
+      "new_fact_rate": 0.0,
+      "staleness_rate": 1.0,
+      "dual_version_rate": 0.0,
+      "write_latency": {
+        "n": 6,
+        "mean_ms": 5481.315068590145,
+        "p50_ms": 5372.425273992121,
+        "p95_ms": 6788.907506503165,
+        "p99_ms": 6886.538675613701
+      },
+      "read_latency": {
+        "n": 3,
+        "mean_ms": 68.32962855696678,
+        "p50_ms": 79.70281317830086,
+        "p95_ms": 79.74824644625187,
+        "p99_ms": 79.75228495895863
+      }
+    },
+    "isolation": {
+      "users": 3,
+      "facts_per_user": 2,
+      "cross_user_queries": 3,
+      "cross_user_leak_rate": 0.0
+    },
+    "deletion": {
+      "records": 3,
+      "pre_delete_visibility_rate": 1.0,
+      "post_delete_absence_rate": 1.0,
+      "audited_deletion_rate": 1.0
+    },
+    "concurrency": {
+      "1": {
+        "records": 4,
+        "workers": 1,
+        "success_rate": 1.0,
+        "operation_success_rate": 1.0,
+        "materialization_rate": 1.0,
+        "error_count": 0,
+        "error_examples": [],
+        "throughput_ops_s": 0.21428564231968716,
+        "latency": {
+          "n": 4,
+          "mean_ms": 4666.494628414512,
+          "p50_ms": 4586.055430583656,
+          "p95_ms": 4897.3461309447885,
+          "p99_ms": 4939.110571034253
+        }
+      },
+      "2": {
+        "records": 4,
+        "workers": 2,
+        "success_rate": 1.0,
+        "operation_success_rate": 1.0,
+        "materialization_rate": 1.0,
+        "error_count": 0,
+        "error_examples": [],
+        "throughput_ops_s": 0.3938435633000231,
+        "latency": {
+          "n": 4,
+          "mean_ms": 5071.694351732731,
+          "p50_ms": 5065.730228088796,
+          "p95_ms": 5133.600818831474,
+          "p99_ms": 5140.898036006838
+        }
+      }
+    },
+    "scale": {
+      "10": {
+        "stored_records": 10,
+        "write_success_rate": 1.0,
+        "write_materialization_rate": 1.0,
+        "recall_at_3": 1.0,
+        "recall_at_3_95ci": [
+          1.0,
+          1.0
+        ],
+        "write_latency": {
+          "n": 10,
+          "mean_ms": 4546.478122472763,
+          "p50_ms": 4515.297693200409,
+          "p95_ms": 4747.494542133063,
+          "p99_ms": 4757.272978331894
+        },
+        "read_latency": {
+          "n": 10,
+          "mean_ms": 64.25142418593168,
+          "p50_ms": 50.90827215462923,
+          "p95_ms": 102.63115270063281,
+          "p99_ms": 102.73610820993781
+        },
+        "write_mean_95ci_ms": [
+          4465.588485826738,
+          4631.035346016288
+        ],
+        "read_mean_95ci_ms": [
+          49.199981121346354,
+          79.83691277913749
+        ]
+      }
+    }
+  }
+}

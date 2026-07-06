@@ -1,0 +1,134 @@
+{
+  "schema_version": "unified-benchmark-v2",
+  "run_id": "langmem_scale_s2027_9170",
+  "system": "langmem",
+  "collection": "amb_kdd27_langmem_langmem_scale_s2027_9170",
+  "config": {
+    "llm_base_url": "http://127.0.0.1:18000/v1",
+    "llm_model": "qwen2.5-14b-instruct",
+    "embedding_base_url": "http://127.0.0.1:18002/v1",
+    "embedding_model": "bge-m3",
+    "embedding_dims": 1024,
+    "qdrant_url": "http://127.0.0.1:6333",
+    "neo4j_uri": "bolt://127.0.0.1:17687",
+    "letta_url": "http://127.0.0.1:8283",
+    "output_dir": "results/formal",
+    "history_dir": "results/formal/history",
+    "top_k": 5,
+    "seed": 2027
+  },
+  "arguments": {
+    "system": "langmem",
+    "phases": "scale",
+    "data": "data/memdialogue_v2.jsonl",
+    "retrieval_records": 1000,
+    "group_size": 10,
+    "conflict_pairs": 250,
+    "isolation_users": 100,
+    "isolation_facts": 5,
+    "deletion_records": 200,
+    "concurrency_records": 200,
+    "workers": "1,4,8,16",
+    "scales": "100,1000",
+    "scale_read_queries": 200,
+    "top_k": 5,
+    "seed": 2027,
+    "warmup_writes": 5,
+    "run_id": "langmem_scale_s2027_9170",
+    "llm_base_url": "http://127.0.0.1:18000/v1",
+    "llm_model": "qwen2.5-14b-instruct",
+    "embedding_base_url": "http://127.0.0.1:18002/v1",
+    "embedding_model": "bge-m3",
+    "embedding_dims": 1024,
+    "qdrant_url": "http://127.0.0.1:6333",
+    "neo4j_uri": "bolt://127.0.0.1:17687",
+    "letta_url": "http://127.0.0.1:8283",
+    "output_dir": "results/formal",
+    "history_dir": "results/formal/history"
+  },
+  "environment": {
+    "timestamp": "2026-07-04T19:37:49.477260+00:00",
+    "python": "3.11.15",
+    "platform": "Linux-6.8.0-90-generic-x86_64-with-glibc2.35",
+    "packages": {
+      "mem0ai": "2.0.11",
+      "langmem": "0.0.30",
+      "graphiti-core": "0.29.2",
+      "openai": "2.44.0",
+      "qdrant-client": "1.18.0",
+      "numpy": "2.4.6"
+    },
+    "gpus": [
+      "NVIDIA GeForce RTX 4080, 580.82.07",
+      "NVIDIA A100 80GB PCIe, 580.82.07"
+    ]
+  },
+  "phases": {
+    "scale": {
+      "100": {
+        "stored_records": 100,
+        "write_success_rate": 1.0,
+        "write_materialization_rate": 1.0,
+        "recall_at_3": 1.0,
+        "recall_at_3_95ci": [
+          1.0,
+          1.0
+        ],
+        "write_latency": {
+          "n": 100,
+          "mean_ms": 1093.5678496025503,
+          "p50_ms": 1092.908727005124,
+          "p95_ms": 1165.7571758143604,
+          "p99_ms": 1182.4272396042943
+        },
+        "read_latency": {
+          "n": 100,
+          "mean_ms": 51.236514039337635,
+          "p50_ms": 44.062220491468906,
+          "p95_ms": 85.4622826911509,
+          "p99_ms": 92.94059518724681
+        },
+        "write_mean_95ci_ms": [
+          1085.0697994711809,
+          1101.8571797409095
+        ],
+        "read_mean_95ci_ms": [
+          47.56465476611629,
+          54.94208562001586
+        ]
+      },
+      "1000": {
+        "stored_records": 1000,
+        "write_success_rate": 1.0,
+        "write_materialization_rate": 1.0,
+        "recall_at_3": 1.0,
+        "recall_at_3_95ci": [
+          1.0,
+          1.0
+        ],
+        "write_latency": {
+          "n": 1000,
+          "mean_ms": 1094.9449459780008,
+          "p50_ms": 1067.319268360734,
+          "p95_ms": 1207.461345102638,
+          "p99_ms": 1240.8262194879353
+        },
+        "read_latency": {
+          "n": 200,
+          "mean_ms": 58.36836129426956,
+          "p50_ms": 48.537698574364185,
+          "p95_ms": 99.74313937127589,
+          "p99_ms": 121.82544369250527
+        },
+        "write_mean_95ci_ms": [
+          1091.3765890261625,
+          1098.4689630539622
+        ],
+        "read_mean_95ci_ms": [
+          55.55712734698318,
+          61.56315174745395
+        ]
+      }
+    }
+  }
+}

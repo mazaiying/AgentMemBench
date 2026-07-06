@@ -1,0 +1,35 @@
+{
+  "created_at": "2026-07-04T11:06:13.200782+00:00",
+  "source_dataset": "allenai/WildChat-4.8M",
+  "source_license": "ODC-BY-1.0",
+  "source_revision": "c827c6df8fcf008219ffaffa4d1dd77491099367",
+  "annotator_model": "qwen2.5-14b-instruct",
+  "annotator_backend": "openai",
+  "prompt_version": "memdialogue-v2.7",
+  "verifier_version": "memdialogue-release-v2",
+  "target": 10000,
+  "records": 9170,
+  "scanned": 3199860,
+  "source_shards_scanned": 86,
+  "rejected": 24583,
+  "duplicates": 290,
+  "event_type_counts": {
+    "TASK_REQUEST": 7000,
+    "PERSONAL_FACT": 2170
+  },
+  "event_type_quotas": {
+    "PERSONAL_FACT": 3000,
+    "TASK_REQUEST": 7000
+  },
+  "record_annotator_models": {
+    "qwen2.5-7b-instruct": 7000,
+    "qwen2.5-14b-instruct": 2170
+  },
+  "filters": {
+    "language": "English",
+    "minimum_messages": 2,
+    "maximum_events_per_conversation": 3,
+    "toxic": false,
+    "release_gate": "deterministic filters plus independent model verification"
+  }
+}

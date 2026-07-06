@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environment
+.env
+.env.*
+*.env
+venv/
+.venv/
+env/
+
+# API Keys (never commit these!)
+api_keys.txt
+secrets.json
+config_local.py
+
+# HuggingFace cache (large files)
+data/hf_cache/
+*.arrow
+*.lock
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# macOS
+.DS_Store
+**/.DS_Store
+._*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Logs
+*.log
+logs/
+results/formal/history/
+
+# Large data files
+
+# Temporary figures
+paper/figures/*.png
